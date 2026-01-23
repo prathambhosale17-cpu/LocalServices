@@ -7,7 +7,7 @@ import type { ProviderProfile } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Star, MapPin, Phone, Mail } from 'lucide-react';
+import { MapPin, Phone, Mail, MessageCircle } from 'lucide-react';
 import { notFound, useParams } from 'next/navigation';
 
 export default function ProviderProfilePage() {
@@ -29,6 +29,8 @@ export default function ProviderProfilePage() {
   if (!provider) {
     return notFound();
   }
+  
+  const whatsappNumber = provider.whatsapp ? provider.whatsapp.replace(/\D/g, '') : '';
 
   return (
     <div className="bg-background">
@@ -69,7 +71,7 @@ export default function ProviderProfilePage() {
                 )}
 
                 {provider.services && provider.services.length > 0 && (
-                  <div className="mb-8">
+                  <div>
                     <h2 className="text-2xl font-bold mb-4 font-headline">Services Offered</h2>
                     <div className="flex flex-wrap gap-2">
                       {provider.services.map(service => (
@@ -78,13 +80,6 @@ export default function ProviderProfilePage() {
                     </div>
                   </div>
                 )}
-
-                <div>
-                  <h2 className="text-2xl font-bold mb-4 font-headline">Reviews (0)</h2>
-                  <div className="space-y-6">
-                      <p className="text-muted-foreground">No reviews yet. Be the first to leave one!</p>
-                  </div>
-                </div>
               </CardContent>
             </Card>
           </div>
@@ -113,23 +108,37 @@ export default function ProviderProfilePage() {
                       </div>
                     </div>
                   )}
-                  <div className="flex items-start gap-3">
-                    <Mail className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium">Email</p>
-                      <a href={`mailto:${provider.email}`} className="text-muted-foreground hover:text-primary">{provider.email}</a>
+                  {provider.email && (
+                    <div className="flex items-start gap-3">
+                      <Mail className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
+                      <div>
+                        <p className="font-medium">Email</p>
+                        <a href={`mailto:${provider.email}`} className="text-muted-foreground hover:text-primary">{provider.email}</a>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <Star className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium">Rating</p>
-                      <p className="text-muted-foreground">Not yet rated</p>
-                    </div>
-                  </div>
-                  <Button className="w-full">
-                    <Phone className="mr-2 h-4 w-4" /> Contact Provider
-                  </Button>
+                  )}
+                </CardContent>
+              </Card>
+
+               <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline">Book Now</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                    {provider.phone && (
+                        <Button asChild size="lg" className="w-full text-lg">
+                            <a href={`tel:${provider.phone}`}>
+                                <Phone className="mr-3 h-5 w-5" /> Call Now
+                            </a>
+                        </Button>
+                    )}
+                    {whatsappNumber && (
+                        <Button asChild size="lg" variant="outline" className="w-full text-lg">
+                            <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noopener noreferrer">
+                                <MessageCircle className="mr-3 h-5 w-5" /> WhatsApp
+                            </a>
+                        </Button>
+                    )}
                 </CardContent>
               </Card>
             </div>

@@ -1,25 +1,5 @@
 {
   "entities": {
-    "UserProfile": {
-      "title": "User Profile",
-      "description": "Represents a user of the LocalFind application.",
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the user entity, matches Firebase Auth UID."
-        },
-        "email": {
-          "type": "string",
-          "description": "Email address of the user.",
-          "format": "email"
-        }
-      },
-      "required": [
-        "id",
-        "email"
-      ]
-    },
     "ProviderProfile": {
       "title": "Provider Profile",
       "description": "Represents the professional profile of a service provider.",
@@ -45,9 +25,13 @@
           "type": "string",
           "description": "Contact phone number."
         },
+        "whatsapp": {
+          "type": "string",
+          "description": "Contact WhatsApp number (international format without symbols)."
+        },
         "email": {
           "type": "string",
-          "description": "Contact email address, matches user's auth email.",
+          "description": "Contact email address.",
           "format": "email"
         },
         "description": {
@@ -63,45 +47,27 @@
         },
         "imageUrl": {
           "type": "string",
-          "description": "Data URI of the provider's profile image."
+          "description": "URL of the provider's profile image."
         }
       },
       "required": [
         "name",
         "category",
-        "location",
-        "email"
+        "location"
       ]
     }
   },
   "auth": {
     "providers": [
-      "password",
       "anonymous"
     ]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/users/{userId}",
-        "definition": {
-          "entityName": "UserProfile",
-          "schema": {
-            "$ref": "#/backend/entities/UserProfile"
-          },
-          "description": "Stores user data. The 'userId' is the Firebase Auth UID. Each user document is independent."
-        }
+    "/providers/{providerId}": {
+      "schema": {
+        "$ref": "#/backend/entities/ProviderProfile"
       },
-      {
-        "path": "/providers/{providerId}",
-        "definition": {
-          "entityName": "ProviderProfile",
-          "schema": {
-            "$ref": "#/backend/entities/ProviderProfile"
-          },
-          "description": "Stores the public profile for a service provider. The 'providerId' is the Firebase Auth UID of the user who owns the profile."
-        }
-      }
-    ]
+      "description": "Stores the public profile for a service provider. The 'providerId' is a unique identifier."
+    }
   }
 }

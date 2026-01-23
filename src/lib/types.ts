@@ -5,7 +5,8 @@ export interface ProviderProfile {
   tagline?: string;
   location: string;
   phone?: string;
-  email: string;
+  whatsapp?: string;
+  email?: string;
   description?: string;
   services?: string[];
   imageUrl?: string;

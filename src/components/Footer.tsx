@@ -12,16 +12,15 @@ export function Footer() {
           <h4 className="font-semibold text-foreground mb-2">For Users</h4>
           <ul className="space-y-1 text-sm">
             <li><Link href="/search" className="hover:text-primary">Browse Categories</Link></li>
-            <li><Link href="#" className="hover:text-primary">Search Providers</Link></li>
-            <li><Link href="#" className="hover:text-primary">How it works</Link></li>
+            <li><Link href="/search" className="hover:text-primary">Search Providers</Link></li>
           </ul>
         </div>
         <div>
-          <h4 className="font-semibold text-foreground mb-2">For Businesses</h4>
+          <h4 className="font-semibold text-foreground mb-2">Company</h4>
           <ul className="space-y-1 text-sm">
-            <li><Link href="#" className="hover:text-primary">List Your Business</Link></li>
-            <li><Link href="#" className="hover:text-primary">Pricing</Link></li>
-            <li><Link href="#" className="hover:text-primary">Support</Link></li>
+            <li><Link href="/contact" className="hover:text-primary">Contact Us</Link></li>
+            <li><Link href="#" className="hover:text-primary">About Us</Link></li>
+            <li><Link href="#" className="hover:text-primary">Privacy Policy</Link></li>
           </ul>
         </div>
       </div>
