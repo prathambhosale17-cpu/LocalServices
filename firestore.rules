@@ -1,0 +1,101 @@
+/**
+ * Core Philosophy: This ruleset enforces a strict user-ownership model. Each user has
+ * a document in the top-level `/users` collection that they, and only they, can control.
+ * This ensures that a user's private information is completely isolated and cannot be
+ * accessed or modified by any other user.
+ *
+ * Data Structure: The data structure is flat and simple, consisting of a single
+ * `/users/{userId}` collection. The document ID (`userId`) directly corresponds to the
+ * Firebase Authentication UID of the user, creating a direct and secure link between
+ * authentication and data ownership.
+ *
+ * Key Security Decisions:
+ * - Disallowing User Listing: To protect user privacy and prevent enumeration attacks,
+ *   querying the entire `/users` collection (`list` operations) is explicitly forbidden
+ *   for all client-side requests.
+ * - Self-Creation: A user can create their own user document, but only if the document
+ *   ID matches their authentication UID. This allows for profile creation post-signup
+ *   while preventing users from creating documents for others.
+ * - Authorization-Critical Fields: On creation, the document's internal `id` field
+ *   is validated to ensure it matches the user's UID. On update, this `id` field is
+ *   enforced as immutable to prevent re-associating the document with a different user.
+ *
+ * Denormalization for Authorization: This model uses the document ID (`userId`) as the
+ * primary key for authorization decisions. This is the most efficient pattern, as it
+ * avoids any need for extra document reads (`get` calls) to verify ownership.
+ *
+ * Structural Segregation: This principle is not applicable here as the data model does
+ * not contain mixed public/private data within the same collection. All user data is
+*  considered private to the owner.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ------------------------------------------------------------------------
+    // Helper Functions
+    // ------------------------------------------------------------------------
+
+    /**
+     * Checks if the user is signed into the application.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the currently authenticated user's UID matches the provided userId.
+     * This is the foundation of the ownership model.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Verifies that a document exists before checking for ownership.
+     * CRITICAL for safe update and delete operations to prevent unintended side effects.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * Validates required relational fields on document creation.
+     * Ensures the internal `id` field matches the document's path ID (`userId`).
+     * This establishes an unbreakable link between the document and its owner.
+     */
+    function hasValidCreateData(userId) {
+      return request.resource.data.id == userId;
+    }
+
+    /**
+     * Validates critical fields on document update.
+     * Enforces immutability of the ownership ID to prevent reassignment.
+     */
+    function hasValidUpdateData() {
+      // The user `id` must never be changed after the document is created.
+      return request.resource.data.id == resource.data.id;
+    }
+
+    // ------------------------------------------------------------------------
+    // Collection Rules
+    // ------------------------------------------------------------------------
+
+    /**
+     * @description Manages user profile documents.
+     * @path /users/{userId}
+     * @allow (create) A new user can create their own user document after signing up.
+     * @allow (get) An authenticated user can read their own user document.
+     * @deny (list) No user, authenticated or not, can list all documents in the `/users` collection.
+     * @deny (update) An authenticated user CANNOT update another user's document.
+     * @principle Restricts access to a user's own data tree and prevents user enumeration.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId) && hasValidCreateData(userId);
+      allow update: if isExistingOwner(userId) && hasValidUpdateData();
+      allow delete: if isExistingOwner(userId);
+    }
+  }
+}
