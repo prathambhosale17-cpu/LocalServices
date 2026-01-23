@@ -2,16 +2,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Star, MapPin } from 'lucide-react';
+import { Star, MapPin, ArrowRight } from 'lucide-react';
 import type { ProviderProfile } from '@/lib/types';
 
 
 export function ProviderCard({ provider }: { provider: ProviderProfile }) {
   
   return (
-    <Card className="flex flex-col h-full overflow-hidden transition-shadow hover:shadow-xl group">
+    <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 group border-0">
       <CardHeader className="p-0">
-        <div className="relative h-48 w-full">
+        <div className="relative h-52 w-full">
           {provider.imageUrl ? (
             <Image
               src={provider.imageUrl}
@@ -27,27 +27,28 @@ export function ProviderCard({ provider }: { provider: ProviderProfile }) {
           )}
         </div>
       </CardHeader>
-      <CardContent className="p-4 flex-grow">
-        <Badge variant="secondary" className="mb-2 uppercase text-xs tracking-wider">{provider.category}</Badge>
-        <CardTitle className="text-xl mb-1">
+      <CardContent className="p-6 flex-grow">
+        <Badge variant="secondary" className="mb-2 uppercase text-xs tracking-wider font-semibold">{provider.category}</Badge>
+        <CardTitle className="text-2xl mb-2 font-headline">
           <Link href={`/provider/${provider.id}`} className="hover:text-primary transition-colors stretched-link">
             {provider.name}
           </Link>
         </CardTitle>
-        <p className="text-sm text-muted-foreground mb-3">{provider.tagline}</p>
-        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-          <MapPin className="h-4 w-4" />
+        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{provider.tagline || 'No tagline provided.'}</p>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <MapPin className="h-4 w-4 flex-shrink-0" />
           <span>{provider.location}</span>
         </div>
       </CardContent>
-      <CardFooter className="p-4 bg-muted/50 flex justify-between items-center text-sm">
-        <div className="flex items-center gap-1">
-          <Star className={'text-muted-foreground/30'} />
+      <CardFooter className="p-6 bg-transparent flex justify-between items-center text-sm">
+        <div className="flex items-center gap-1 text-muted-foreground">
+          <Star className={'text-muted-foreground/30 h-4 w-4'} />
           <span className="font-semibold">New</span>
-          <span className="text-muted-foreground">(0 reviews)</span>
+          <span>(0 reviews)</span>
         </div>
-        <div className="text-primary font-semibold group-hover:underline">
+        <div className="text-primary font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
           View Profile
+          <ArrowRight className="h-4 w-4" />
         </div>
       </CardFooter>
     </Card>

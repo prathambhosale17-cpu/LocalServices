@@ -47,20 +47,20 @@ export default function SearchPage() {
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
-      <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-        <aside className="w-full md:w-64 flex-shrink-0">
-          <div className="sticky top-24">
-            <h3 className="font-bold font-headline text-lg mb-4">Categories</h3>
-            <ul className="space-y-1">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <aside className="col-span-1 md:col-span-1">
+          <div className="sticky top-28 p-4 rounded-lg bg-card shadow-lg border">
+            <h3 className="font-bold font-headline text-xl mb-4">Categories</h3>
+            <ul className="space-y-2">
               <li>
-                  <Link href="/search" className={`flex items-center p-2 rounded-md text-sm font-medium ${!categoryId ? 'bg-primary/10 text-primary' : 'hover:bg-accent/50'}`}>
+                  <Link href="/search" className={`flex items-center p-3 rounded-lg text-base font-medium ${!categoryId ? 'bg-primary/10 text-primary' : 'hover:bg-accent/50'}`}>
                     All Services
                   </Link>
               </li>
               {categories.map(cat => (
                 <li key={cat.id}>
-                  <Link href={`/search?cat=${cat.id}`} className={`flex items-center gap-2 p-2 rounded-md text-sm font-medium ${cat.id === categoryId ? 'bg-primary/10 text-primary' : 'hover:bg-accent/50'}`}>
-                    <cat.icon className="h-4 w-4" />
+                  <Link href={`/search?cat=${cat.id}`} className={`flex items-center gap-3 p-3 rounded-lg text-base font-medium ${cat.id === categoryId ? 'bg-primary/10 text-primary' : 'hover:bg-accent/50'}`}>
+                    <cat.icon className="h-5 w-5" />
                     {cat.name}
                   </Link>
                 </li>
@@ -69,24 +69,24 @@ export default function SearchPage() {
           </div>
         </aside>
 
-        <main className="w-full min-w-0">
-          <h1 className="text-3xl font-bold font-headline mb-2">
+        <main className="col-span-1 md:col-span-3 min-w-0">
+          <h1 className="text-4xl font-bold font-headline mb-4">
             {title}
           </h1>
           
           {isLoading && <p className="text-muted-foreground">Loading providers...</p>}
           {!isLoading && providers && (
             <>
-              <p className="text-muted-foreground mb-6">Found {filteredProviders.length} providers matching your criteria.</p>
+              <p className="text-muted-foreground mb-8 text-lg">Found {filteredProviders.length} providers matching your criteria.</p>
               {filteredProviders.length > 0 ? (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                   {filteredProviders.map(provider => (
                     <ProviderCard key={provider.id} provider={provider} />
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-24 border-2 border-dashed rounded-lg bg-card">
-                  <h2 className="text-xl font-semibold mb-2">No providers found</h2>
+                <div className="text-center py-24 border-2 border-dashed rounded-lg bg-card mt-12">
+                  <h2 className="text-2xl font-semibold font-headline mb-2">No providers found</h2>
                   <p className="text-muted-foreground max-w-sm mx-auto">Try adjusting your search terms, or select a different category to browse available services.</p>
                 </div>
               )}

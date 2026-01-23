@@ -4,7 +4,7 @@ import { Mail, Phone } from "lucide-react";
 export default function ContactPage() {
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
-      <Card className="max-w-2xl mx-auto">
+      <Card className="max-w-2xl mx-auto shadow-xl">
         <CardHeader>
           <CardTitle className="text-3xl font-bold font-headline">Contact Us</CardTitle>
         </CardHeader>

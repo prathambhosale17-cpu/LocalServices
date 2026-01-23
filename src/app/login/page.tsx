@@ -69,7 +69,7 @@ export default function LoginPage() {
 
   return (
     <div className="container mx-auto flex min-h-[calc(100vh-15rem)] items-center justify-center px-4 md:px-6">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md shadow-xl">
         <CardHeader>
           <CardTitle className="text-3xl font-bold font-headline">Welcome Back</CardTitle>
           <CardDescription>Sign in to manage your account and listings.</CardDescription>

@@ -34,7 +34,7 @@ export default function ProfilePage() {
   if (isUserLoading || !user) {
     return (
         <div className="container mx-auto px-4 md:px-6 py-12">
-            <Card className="max-w-2xl mx-auto">
+            <Card className="max-w-2xl mx-auto shadow-xl">
                 <CardHeader>
                     <Skeleton className="h-8 w-48" />
                     <Skeleton className="h-4 w-64 mt-2" />
@@ -58,7 +58,7 @@ export default function ProfilePage() {
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
-      <Card className="max-w-2xl mx-auto">
+      <Card className="max-w-2xl mx-auto shadow-xl">
         <CardHeader>
           <CardTitle className="text-3xl font-bold font-headline">My Profile</CardTitle>
           <CardDescription>Welcome, you are logged in.</CardDescription>

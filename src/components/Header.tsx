@@ -29,13 +29,13 @@ export function Header() {
   }
 
   return (
-    <header className="bg-card shadow-sm sticky top-0 z-50">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          <Handshake className="h-6 w-6 text-primary" />
+    <header className="bg-card border-b sticky top-0 z-50">
+      <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+          <Handshake className="h-7 w-7 text-primary" />
           <span className="font-headline">LocalFind</span>
         </Link>
-        <nav className="flex items-center gap-2">
+        <nav className="hidden md:flex items-center gap-2">
           <Button variant="ghost" asChild>
             <Link href="/search">Browse Services</Link>
           </Button>
@@ -44,9 +44,9 @@ export function Header() {
           </Button>
           
           {isUserLoading ? (
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-10 w-24" />
-              <Skeleton className="h-10 w-24" />
+            <div className="flex items-center gap-4">
+              <Skeleton className="h-10 w-28" />
+              <Skeleton className="h-10 w-28" />
             </div>
           ) : user ? (
             <>
@@ -55,12 +55,12 @@ export function Header() {
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon" className="rounded-full">
-                    <UserIcon className="h-5 w-5" />
+                  <Button variant="outline" size="icon" className="rounded-full w-12 h-12">
+                    <UserIcon className="h-6 w-6" />
                     <span className="sr-only">User Menu</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="mt-2">
                   <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
@@ -74,7 +74,7 @@ export function Header() {
               </DropdownMenu>
             </>
           ) : (
-            <>
+            <div className="flex items-center gap-2">
               <Button variant="ghost" asChild>
                 <Link href="/login">
                   <LogIn className="mr-2 h-4 w-4" />
@@ -87,9 +87,10 @@ export function Header() {
                   Sign Up
                 </Link>
               </Button>
-            </>
+            </div>
           )}
         </nav>
+        {/* Mobile Nav Trigger will go here if needed */}
       </div>
     </header>
   );
