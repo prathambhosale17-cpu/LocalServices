@@ -37,7 +37,7 @@ service cloud.firestore {
      * PROVIDERS
      *
      * Rules for the `/providers` collection. Provider profiles are
-     * public, but cannot be modified from the client-side.
+     * public, but can only be created by authenticated users.
      *****************************************************************/
     match /providers/{providerId} {
       /**
@@ -48,32 +48,11 @@ service cloud.firestore {
       allow get, list: if true;
 
       /**
-       * @description Client-side writes are disabled to protect data integrity.
-       * All provider data must be managed through a separate, secure backend or
-       * the Firebase Console.
-       * @allow (create) Disabled for clients.
-       * @allow (update) Disabled for clients.
-       * @allow (delete) Disabled for clients.
-       */
-      allow write: if false;
-    }
-
-    /*****************************************************************
-     * PROVIDER SUBMISSIONS
-     *
-     * Rules for the `/provider-submissions` collection. Only authenticated
-     * users can create a submission for review.
-     *****************************************************************/
-    match /provider-submissions/{submissionId} {
-      allow get, list: if false;
-      allow update, delete: if false;
-
-      /**
        * @description Authenticated users can submit a provider profile.
        * The submitted data must conform to the schema and include the
        * user's UID.
        */
-      allow create: if request.auth != null
+       allow create: if request.auth != null
                     && request.resource.data.userId == request.auth.uid
                     && request.resource.data.name is string
                     && request.resource.data.name.size() > 1
@@ -81,6 +60,13 @@ service cloud.firestore {
                     && request.resource.data.category.size() > 0
                     && request.resource.data.location is string
                     && request.resource.data.location.size() > 1;
+
+      /**
+       * @description Client-side updates/deletes are disabled to protect data integrity.
+       * @allow (update) Disabled for clients.
+       * @allow (delete) Disabled for clients.
+       */
+      allow update, delete: if false;
     }
   }
 }

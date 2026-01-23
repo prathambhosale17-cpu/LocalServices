@@ -93,9 +93,9 @@ export default function ListYourBusinessPage() {
       userId: user.uid, // Add the user's ID
     };
     
-    const submissionsColRef = collection(firestore, 'provider-submissions');
+    const providersColRef = collection(firestore, 'providers');
 
-    addDoc(submissionsColRef, submissionData)
+    addDoc(providersColRef, submissionData)
       .then(() => {
         setIsSubmitted(true);
       })
@@ -103,7 +103,7 @@ export default function ListYourBusinessPage() {
         console.error('Error submitting form:', error);
 
         const permissionError = new FirestorePermissionError({
-            path: submissionsColRef.path,
+            path: providersColRef.path,
             operation: 'create',
             requestResourceData: submissionData,
         });
@@ -134,7 +134,7 @@ export default function ListYourBusinessPage() {
                 <CheckCircle className="h-16 w-16 mx-auto text-green-500 mb-4" />
                 <h1 className="text-3xl font-bold font-headline mb-2">Thank You!</h1>
                 <p className="text-muted-foreground text-lg">
-                    Your submission has been received. We will review it and get back to you shortly.
+                    Your business has been successfully listed and is now visible to everyone.
                 </p>
             </CardContent>
         </Card>
@@ -327,7 +327,7 @@ export default function ListYourBusinessPage() {
               />
 
               <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Submitting...' : 'Submit for Review'}
+                {form.formState.isSubmitting ? 'Submitting...' : 'Submit and Go Live'}
               </Button>
             </form>
           </Form>
