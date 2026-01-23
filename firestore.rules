@@ -3,6 +3,37 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     /*****************************************************************
+     * USERS
+     *
+     * Rules for the `/users` collection.
+     *****************************************************************/
+    match /users/{userId} {
+      /**
+       * @description A user can create their own profile document.
+       * The document ID must match their UID and the email must match.
+       * @allow (create) Authenticated users can create their own profile.
+       */
+      allow create: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.email == request.auth.token.email;
+
+      /**
+       * @description A user can read their own profile.
+       * @allow (get) Authenticated users can read their own profile.
+       */
+      allow get: if request.auth != null && request.auth.uid == userId;
+
+      /**
+       * @description User profiles are private and cannot be listed,
+       * updated, or deleted from the client-side after creation.
+       * @allow (list) Disabled for clients.
+       * @allow (update) Disabled for clients.
+       * @allow (delete) Disabled for clients.
+       */
+      allow list, update, delete: if false;
+    }
+
+    /*****************************************************************
      * PROVIDERS
      *
      * Rules for the `/providers` collection. Provider profiles are
@@ -30,20 +61,21 @@ service cloud.firestore {
     /*****************************************************************
      * PROVIDER SUBMISSIONS
      *
-     * Rules for the `/provider-submissions` collection. Anyone can
-     * create a submission for review. Reads, updates and deletes
-     * are disallowed for security.
+     * Rules for the `/provider-submissions` collection. Only authenticated
+     * users can create a submission for review.
      *****************************************************************/
     match /provider-submissions/{submissionId} {
       allow get, list: if false;
       allow update, delete: if false;
 
       /**
-       * @description Anyone can submit a provider profile for review.
-       * The submitted data must conform to the required fields of the
-       * ProviderProfile schema to ensure basic data quality.
+       * @description Authenticated users can submit a provider profile.
+       * The submitted data must conform to the schema and include the
+       * user's UID.
        */
-      allow create: if request.resource.data.name is string
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.name is string
                     && request.resource.data.name.size() > 1
                     && request.resource.data.category is string
                     && request.resource.data.category.size() > 0

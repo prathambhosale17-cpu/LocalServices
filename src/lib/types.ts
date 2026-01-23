@@ -1,5 +1,6 @@
 export interface ProviderProfile {
   id: string;
+  userId?: string;
   name: string;
   category: string;
   tagline?: string;

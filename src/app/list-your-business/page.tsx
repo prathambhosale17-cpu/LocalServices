@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { addDoc, collection } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useUser } from '@/firebase';
 import { categories } from '@/lib/data';
 
 import { Button } from '@/components/ui/button';
@@ -29,7 +30,7 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Loader2 } from 'lucide-react';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
@@ -53,6 +54,14 @@ export default function ListYourBusinessPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const firestore = useFirestore();
   const { toast } = useToast();
+  const { user, isUserLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/login?redirect=/list-your-business');
+    }
+  }, [isUserLoading, user, router]);
 
   const form = useForm<ProviderFormValues>({
     resolver: zodResolver(providerSchema),
@@ -71,7 +80,7 @@ export default function ListYourBusinessPage() {
   });
 
   async function onSubmit(values: ProviderFormValues) {
-    if (!firestore) return;
+    if (!firestore || !user) return;
 
     // Transform services string to array
     const servicesArray = values.services
@@ -81,6 +90,7 @@ export default function ListYourBusinessPage() {
     const submissionData = {
       ...values,
       services: servicesArray,
+      userId: user.uid, // Add the user's ID
     };
     
     const submissionsColRef = collection(firestore, 'provider-submissions');
@@ -98,7 +108,6 @@ export default function ListYourBusinessPage() {
             requestResourceData: submissionData,
         });
 
-        // Emit the error with the global error emitter
         errorEmitter.emit('permission-error', permissionError);
         
         toast({
@@ -107,6 +116,14 @@ export default function ListYourBusinessPage() {
           description: 'Could not submit your details. Please try again.',
         });
       });
+  }
+
+  if (isUserLoading || !user) {
+    return (
+        <div className="container mx-auto flex min-h-[calc(100vh-15rem)] items-center justify-center">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        </div>
+    );
   }
 
   if (isSubmitted) {
