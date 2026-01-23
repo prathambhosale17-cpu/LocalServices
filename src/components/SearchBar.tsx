@@ -22,7 +22,7 @@ export function SearchBar() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="w-full max-w-2xl mx-auto bg-card p-4 rounded-lg shadow-lg flex flex-col md:flex-row gap-2">
+    <form onSubmit={handleSearch} className="w-full max-w-2xl mx-auto bg-card p-4 rounded-lg shadow-lg flex flex-col md:flex-row gap-2" suppressHydrationWarning>
       <div className="relative flex-grow">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input
