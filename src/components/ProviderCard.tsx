@@ -1,15 +1,15 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Star, MapPin, ArrowRight } from 'lucide-react';
 import type { ProviderProfile } from '@/lib/types';
 import { useState, useEffect } from 'react';
+import type { WithId } from '@/firebase';
 
 
-export function ProviderCard({ provider }: { provider: ProviderProfile }) {
+export function ProviderCard({ provider }: { provider: WithId<ProviderProfile> }) {
   const fallbackSrc = `https://picsum.photos/seed/${provider.id}/600/400`;
   const [imgSrc, setImgSrc] = useState(fallbackSrc);
 
