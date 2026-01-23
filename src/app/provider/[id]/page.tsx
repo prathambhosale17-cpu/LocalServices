@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { MapPin, Phone, Mail, MessageCircle, Star, ArrowLeft } from 'lucide-react';
 import { notFound, useParams, useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useState, useEffect } from 'react';
 
 function ProviderLoadingSkeleton() {
   return (
@@ -59,6 +60,15 @@ export default function ProviderProfilePage() {
   }, [firestore, id]);
 
   const { data: provider, isLoading } = useDoc<ProviderProfile>(providerRef);
+
+  const fallbackSrc = `https://picsum.photos/seed/${id}/800/600`;
+  const [imgSrc, setImgSrc] = useState(fallbackSrc);
+
+  useEffect(() => {
+    if (provider) {
+      setImgSrc(provider.imageUrl || fallbackSrc);
+    }
+  }, [provider, fallbackSrc]);
   
   if (isLoading) {
     return <ProviderLoadingSkeleton />;
@@ -99,19 +109,14 @@ export default function ProviderProfilePage() {
 
             <Card className="overflow-hidden shadow-lg">
               <div className="relative h-64 md:h-96 w-full">
-                {provider.imageUrl ? (
-                  <Image
-                    src={provider.imageUrl}
-                    alt={`Hero image for ${provider.name}`}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                ) : (
-                    <div className="h-full w-full bg-muted flex items-center justify-center">
-                        <p className="text-muted-foreground text-lg">No image provided</p>
-                    </div>
-                )}
+                <Image
+                  src={imgSrc}
+                  alt={`Hero image for ${provider.name}`}
+                  onError={() => setImgSrc(fallbackSrc)}
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
             </Card>
 

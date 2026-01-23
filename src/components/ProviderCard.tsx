@@ -1,30 +1,34 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Star, MapPin, ArrowRight } from 'lucide-react';
 import type { ProviderProfile } from '@/lib/types';
+import { useState, useEffect } from 'react';
 
 
 export function ProviderCard({ provider }: { provider: ProviderProfile }) {
+  const fallbackSrc = `https://picsum.photos/seed/${provider.id}/600/400`;
+  const [imgSrc, setImgSrc] = useState(fallbackSrc);
+
+  useEffect(() => {
+    setImgSrc(provider.imageUrl || fallbackSrc);
+  }, [provider.imageUrl, fallbackSrc]);
   
   return (
     <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 group border">
       <CardHeader className="p-0">
         <div className="relative h-52 w-full">
-          {provider.imageUrl ? (
-            <Image
-              src={provider.imageUrl}
-              alt={`Image for ${provider.name}`}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-          ) : (
-            <div className="h-full w-full bg-muted flex items-center justify-center">
-                <p className="text-muted-foreground text-sm">No image available</p>
-            </div>
-          )}
+          <Image
+            src={imgSrc}
+            alt={`Image for ${provider.name}`}
+            onError={() => setImgSrc(fallbackSrc)}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
         </div>
       </CardHeader>
       <CardContent className="p-6 flex-grow">

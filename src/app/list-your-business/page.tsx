@@ -319,7 +319,7 @@ export default function ListYourBusinessPage() {
                       <Input placeholder="https://example.com/your-image.jpg" {...field} />
                     </FormControl>
                      <FormDescription>
-                      Link to a photo for your profile (e.g., from Imgur, Google Photos).
+                      Direct link to a public image (e.g., from Imgur). Google Photos links will not work.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
