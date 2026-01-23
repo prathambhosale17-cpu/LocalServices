@@ -1,14 +1,13 @@
 {
   "entities": {
-    "User": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "User",
-      "type": "object",
+    "UserProfile": {
+      "title": "User Profile",
       "description": "Represents a user of the LocalFind application.",
+      "type": "object",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the user entity."
+          "description": "Unique identifier for the user entity, matches Firebase Auth UID."
         },
         "email": {
           "type": "string",
@@ -18,6 +17,59 @@
       },
       "required": [
         "id",
+        "email"
+      ]
+    },
+    "ProviderProfile": {
+      "title": "Provider Profile",
+      "description": "Represents the professional profile of a service provider.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the service provider or business."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category of service offered."
+        },
+        "tagline": {
+          "type": "string",
+          "description": "A short, catchy tagline for the provider."
+        },
+        "location": {
+          "type": "string",
+          "description": "The physical location or service area."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact phone number."
+        },
+        "email": {
+          "type": "string",
+          "description": "Contact email address, matches user's auth email.",
+          "format": "email"
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the provider and their services."
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of specific services offered."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Data URI of the provider's profile image."
+        }
+      },
+      "required": [
+        "name",
+        "category",
+        "location",
         "email"
       ]
     }
@@ -33,20 +85,23 @@
       {
         "path": "/users/{userId}",
         "definition": {
-          "entityName": "User",
+          "entityName": "UserProfile",
           "schema": {
-            "$ref": "#/backend/entities/User"
+            "$ref": "#/backend/entities/UserProfile"
           },
-          "description": "Stores user data. The 'userId' is the Firebase Auth UID. Each user document is independent, ensuring Authorization Independence.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The Firebase Auth UID of the user."
-            }
-          ]
+          "description": "Stores user data. The 'userId' is the Firebase Auth UID. Each user document is independent."
+        }
+      },
+      {
+        "path": "/providers/{providerId}",
+        "definition": {
+          "entityName": "ProviderProfile",
+          "schema": {
+            "$ref": "#/backend/entities/ProviderProfile"
+          },
+          "description": "Stores the public profile for a service provider. The 'providerId' is the Firebase Auth UID of the user who owns the profile."
         }
       }
-    ],
-    "reasoning": "Given the simple authentication requirements (password and anonymous login) and the lack of specific data entities beyond the User, the Firestore structure will focus on user management. A dedicated collection for users is the simplest and most appropriate structure. This structure ensures Authorization Independence as user data is self-contained. QAPs are satisfied as listing users would require admin privileges, not exposed to regular users."
+    ]
   }
 }

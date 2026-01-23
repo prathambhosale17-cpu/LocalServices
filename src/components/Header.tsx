@@ -32,7 +32,9 @@ export function Header() {
             </>
           ) : (
             <>
-              <Button variant="ghost">List Your Business</Button>
+              <Button variant="ghost" asChild>
+                <Link href="/list-your-business">List Your Business</Link>
+              </Button>
               <Button variant="outline" onClick={() => signOut(auth)}>
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
