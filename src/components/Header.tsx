@@ -1,8 +1,15 @@
+'use client';
+
 import Link from 'next/link';
-import { Handshake } from 'lucide-react';
+import { Handshake, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useUser } from '@/firebase/provider';
+import { getAuth, signOut } from 'firebase/auth';
 
 export function Header() {
+  const { user } = useUser();
+  const auth = getAuth();
+
   return (
     <header className="bg-card shadow-sm sticky top-0 z-50">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
@@ -14,7 +21,24 @@ export function Header() {
           <Button variant="ghost" asChild>
             <Link href="/search">Browse Services</Link>
           </Button>
-          <Button>List Your Business</Button>
+          {!user ? (
+            <>
+              <Button variant="outline" asChild>
+                <Link href="/login">Sign In</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/signup">Sign Up</Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost">List Your Business</Button>
+              <Button variant="outline" onClick={() => signOut(auth)}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </Button>
+            </>
+          )}
         </nav>
       </div>
     </header>
