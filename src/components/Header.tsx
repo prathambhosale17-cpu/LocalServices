@@ -19,6 +19,9 @@ export function Header() {
            <Button variant="ghost" asChild>
             <Link href="/contact">Contact</Link>
           </Button>
+           <Button asChild>
+            <Link href="/list-your-business">List Your Business</Link>
+          </Button>
         </nav>
       </div>
     </header>

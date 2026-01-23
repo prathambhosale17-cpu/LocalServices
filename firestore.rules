@@ -26,5 +26,29 @@ service cloud.firestore {
        */
       allow write: if false;
     }
+
+    /*****************************************************************
+     * PROVIDER SUBMISSIONS
+     *
+     * Rules for the `/provider-submissions` collection. Anyone can
+     * create a submission for review. Reads, updates and deletes
+     * are disallowed for security.
+     *****************************************************************/
+    match /provider-submissions/{submissionId} {
+      allow get, list: if false;
+      allow update, delete: if false;
+
+      /**
+       * @description Anyone can submit a provider profile for review.
+       * The submitted data must conform to the required fields of the
+       * ProviderProfile schema to ensure basic data quality.
+       */
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.name.size() > 1
+                    && request.resource.data.category is string
+                    && request.resource.data.category.size() > 0
+                    && request.resource.data.location is string
+                    && request.resource.data.location.size() > 1;
+    }
   }
 }

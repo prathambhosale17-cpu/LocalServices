@@ -68,6 +68,12 @@
         "$ref": "#/backend/entities/ProviderProfile"
       },
       "description": "Stores the public profile for a service provider. The 'providerId' is a unique identifier."
+    },
+    "/provider-submissions/{submissionId}": {
+      "schema": {
+        "$ref": "#/backend/entities/ProviderProfile"
+      },
+      "description": "Stores new service provider submissions for admin review. Anyone can create a new submission."
     }
   }
 }
