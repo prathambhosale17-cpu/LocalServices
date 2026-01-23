@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, MapPin } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function SearchBar() {
   const router = useRouter();
@@ -49,5 +50,19 @@ export function SearchBar() {
         Search
       </Button>
     </form>
+  );
+}
+
+export function SearchBarFallback() {
+  return (
+    <div className="w-full max-w-2xl mx-auto bg-card p-4 rounded-lg shadow-lg flex flex-col md:flex-row gap-2">
+      <div className="relative flex-grow">
+        <Skeleton className="h-10 w-full" />
+      </div>
+      <div className="relative flex-grow">
+        <Skeleton className="h-10 w-full" />
+      </div>
+      <Skeleton className="h-10 w-full md:w-[108px]" />
+    </div>
   );
 }

@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { categories } from '@/lib/data';
 import { Card, CardContent } from '@/components/ui/card';
-import { SearchBar } from '@/components/SearchBar';
+import { SearchBar, SearchBarFallback } from '@/components/SearchBar';
+import { Suspense } from 'react';
 
 export default function Home() {
   return (
@@ -14,7 +15,9 @@ export default function Home() {
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             Your one-stop directory for trusted service providers in your community.
           </p>
-          <SearchBar />
+          <Suspense fallback={<SearchBarFallback />}>
+            <SearchBar />
+          </Suspense>
         </div>
       </section>
 
