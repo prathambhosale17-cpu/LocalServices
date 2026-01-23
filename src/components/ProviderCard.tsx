@@ -18,7 +18,7 @@ export function ProviderCard({ provider }: { provider: ProviderProfile }) {
   }, [provider.imageUrl, fallbackSrc]);
   
   return (
-    <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 group border">
+    <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 shadow-md group-hover:shadow-xl group-hover:-translate-y-1 border">
       <CardHeader className="p-0">
         <div className="relative h-52 w-full">
           <Image
@@ -33,10 +33,8 @@ export function ProviderCard({ provider }: { provider: ProviderProfile }) {
       </CardHeader>
       <CardContent className="p-6 flex-grow">
         <Badge variant="secondary" className="mb-2 uppercase text-xs tracking-wider font-semibold">{provider.category}</Badge>
-        <CardTitle className="text-2xl mb-2 font-headline">
-          <Link href={`/provider/${provider.id}`} className="hover:text-primary transition-colors stretched-link">
-            {provider.name}
-          </Link>
+        <CardTitle className="text-2xl mb-2 font-headline group-hover:text-primary transition-colors">
+          {provider.name}
         </CardTitle>
         <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{provider.tagline || 'No tagline provided.'}</p>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
