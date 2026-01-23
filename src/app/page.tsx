@@ -7,12 +7,12 @@ import { Suspense } from 'react';
 export default function Home() {
   return (
     <>
-      <section className="py-20 md:py-32 bg-gradient-to-b from-background to-accent/50">
+      <section className="py-20 md:py-32 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 md:px-6 text-center">
-          <h1 className="text-4xl md:text-6xl font-headline font-bold mb-4 text-foreground">
+          <h1 className="text-4xl md:text-6xl font-headline font-bold mb-4">
             Find Local Services, Instantly.
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl opacity-90 mb-12 max-w-3xl mx-auto">
             Your one-stop directory for trusted service providers in your community.
           </p>
           <Suspense fallback={<SearchBarFallback />}>
@@ -29,7 +29,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {categories.map((category) => (
               <Link href={`/search?cat=${category.id}`} key={category.id} className="group">
-                <Card className="text-center bg-card group-hover:shadow-xl group-hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col justify-center border-0 shadow-md">
+                <Card className="text-center bg-card group-hover:shadow-xl group-hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col justify-center border shadow-md group-hover:border-primary">
                   <CardContent className="p-6">
                     <category.icon className="h-10 w-10 mx-auto text-primary mb-4 transition-colors" />
                     <h3 className="font-semibold text-lg">{category.name}</h3>

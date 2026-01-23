@@ -9,7 +9,7 @@ import type { ProviderProfile } from '@/lib/types';
 export function ProviderCard({ provider }: { provider: ProviderProfile }) {
   
   return (
-    <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 group border-0">
+    <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 group border">
       <CardHeader className="p-0">
         <div className="relative h-52 w-full">
           {provider.imageUrl ? (
