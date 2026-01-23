@@ -1,30 +1,34 @@
+'use client';
+
 import Image from 'next/image';
-import { providers } from '@/lib/data';
-import type { Provider } from '@/lib/data';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { doc } from 'firebase/firestore';
+import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import type { ProviderProfile } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { ReviewCard } from '@/components/ReviewCard';
 import { Star, MapPin, Phone, Mail } from 'lucide-react';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 
-function getAverageRating(provider: Provider): number {
-  if (!provider.reviews || provider.reviews.length === 0) return 0;
-  const total = provider.reviews.reduce((acc, review) => acc + review.rating, 0);
-  const average = total / provider.reviews.length;
-  return Math.round(average * 10) / 10;
-}
+export default function ProviderProfilePage() {
+  const params = useParams();
+  const id = params.id as string;
+  const firestore = useFirestore();
 
-export default function ProviderProfilePage({ params }: { params: { id: string } }) {
-  const provider = providers.find(p => p.id === params.id);
+  const providerRef = useMemoFirebase(() => {
+    if (!id) return null;
+    return doc(firestore, 'providers', id);
+  }, [firestore, id]);
+
+  const { data: provider, isLoading } = useDoc<ProviderProfile>(providerRef);
   
-  if (!provider) {
-    notFound();
+  if (isLoading) {
+    return <div className="container mx-auto p-8">Loading profile...</div>;
   }
 
-  const placeholderImage = PlaceHolderImages.find(img => img.id === provider.imageId);
-  const averageRating = getAverageRating(provider);
+  if (!provider) {
+    return notFound();
+  }
 
   return (
     <div className="bg-background">
@@ -33,49 +37,52 @@ export default function ProviderProfilePage({ params }: { params: { id: string }
           <div className="md:col-span-2 space-y-8">
             <Card className="overflow-hidden">
               <CardHeader className="relative h-64 md:h-80 w-full p-0">
-                {placeholderImage && (
+                {provider.imageUrl ? (
                   <Image
-                    src={placeholderImage.imageUrl}
+                    src={provider.imageUrl}
                     alt={`Hero image for ${provider.name}`}
                     fill
                     className="object-cover"
-                    data-ai-hint={placeholderImage.imageHint}
                     priority
                   />
+                ) : (
+                    <div className="h-full w-full bg-muted flex items-center justify-center">
+                        <p className="text-muted-foreground text-lg">No image provided</p>
+                    </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-6">
                   <Badge variant="secondary" className="mb-2 uppercase text-xs tracking-wider">{provider.category}</Badge>
                   <h1 className="text-3xl md:text-4xl font-bold text-white">{provider.name}</h1>
-                  <p className="text-lg text-neutral-200">{provider.tagline}</p>
+                  {provider.tagline && <p className="text-lg text-neutral-200">{provider.tagline}</p>}
                 </div>
               </CardHeader>
             </Card>
 
             <Card>
               <CardContent className="p-6">
-                <div className="mb-8">
-                  <h2 className="text-2xl font-bold mb-4 font-headline">About {provider.name}</h2>
-                  <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{provider.description}</p>
-                </div>
-
-                <div className="mb-8">
-                  <h2 className="text-2xl font-bold mb-4 font-headline">Services Offered</h2>
-                  <div className="flex flex-wrap gap-2">
-                    {provider.services.map(service => (
-                      <Badge key={service} variant="outline">{service}</Badge>
-                    ))}
+                {provider.description && (
+                  <div className="mb-8">
+                    <h2 className="text-2xl font-bold mb-4 font-headline">About {provider.name}</h2>
+                    <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{provider.description}</p>
                   </div>
-                </div>
+                )}
+
+                {provider.services && provider.services.length > 0 && (
+                  <div className="mb-8">
+                    <h2 className="text-2xl font-bold mb-4 font-headline">Services Offered</h2>
+                    <div className="flex flex-wrap gap-2">
+                      {provider.services.map(service => (
+                        <Badge key={service} variant="outline">{service}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 font-headline">Reviews ({provider.reviews.length})</h2>
+                  <h2 className="text-2xl font-bold mb-4 font-headline">Reviews (0)</h2>
                   <div className="space-y-6">
-                    {provider.reviews.length > 0 ? (
-                      provider.reviews.map(review => <ReviewCard key={review.id} review={review} />)
-                    ) : (
                       <p className="text-muted-foreground">No reviews yet. Be the first to leave one!</p>
-                    )}
                   </div>
                 </div>
               </CardContent>
@@ -97,13 +104,15 @@ export default function ProviderProfilePage({ params }: { params: { id: string }
                       <p className="text-muted-foreground">{provider.location}</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Phone className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium">Phone</p>
-                      <a href={`tel:${provider.phone}`} className="text-muted-foreground hover:text-primary">{provider.phone}</a>
+                  {provider.phone && (
+                    <div className="flex items-start gap-3">
+                      <Phone className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
+                      <div>
+                        <p className="font-medium">Phone</p>
+                        <a href={`tel:${provider.phone}`} className="text-muted-foreground hover:text-primary">{provider.phone}</a>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className="flex items-start gap-3">
                     <Mail className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
                     <div>
@@ -115,7 +124,7 @@ export default function ProviderProfilePage({ params }: { params: { id: string }
                     <Star className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
                     <div>
                       <p className="font-medium">Rating</p>
-                      <p className="text-muted-foreground">{averageRating > 0 ? `${averageRating.toFixed(1)}/5 (${provider.reviews.length} reviews)` : 'Not yet rated'}</p>
+                      <p className="text-muted-foreground">Not yet rated</p>
                     </div>
                   </div>
                   <Button className="w-full">

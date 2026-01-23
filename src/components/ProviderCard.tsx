@@ -3,32 +3,22 @@ import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Star, MapPin } from 'lucide-react';
-import type { Provider } from '@/lib/data';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import type { ProviderProfile } from '@/lib/types';
 
-function getAverageRating(provider: Provider): number {
-  if (!provider.reviews || provider.reviews.length === 0) return 0;
-  const total = provider.reviews.reduce((acc, review) => acc + review.rating, 0);
-  const average = total / provider.reviews.length;
-  return Math.round(average * 10) / 10;
-}
 
-export function ProviderCard({ provider }: { provider: Provider }) {
-  const averageRating = getAverageRating(provider);
-  const placeholderImage = PlaceHolderImages.find(img => img.id === provider.imageId);
-
+export function ProviderCard({ provider }: { provider: ProviderProfile }) {
+  
   return (
     <Card className="flex flex-col h-full overflow-hidden transition-shadow hover:shadow-xl group">
       <CardHeader className="p-0">
         <div className="relative h-48 w-full">
-          {placeholderImage ? (
+          {provider.imageUrl ? (
             <Image
-              src={placeholderImage.imageUrl}
+              src={provider.imageUrl}
               alt={`Image for ${provider.name}`}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              data-ai-hint={placeholderImage.imageHint}
             />
           ) : (
             <div className="h-full w-full bg-muted flex items-center justify-center">
@@ -52,9 +42,9 @@ export function ProviderCard({ provider }: { provider: Provider }) {
       </CardContent>
       <CardFooter className="p-4 bg-muted/50 flex justify-between items-center text-sm">
         <div className="flex items-center gap-1">
-          <Star className={`h-5 w-5 ${averageRating > 0 ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/30'}`} />
-          <span className="font-semibold">{averageRating > 0 ? averageRating.toFixed(1) : 'New'}</span>
-          <span className="text-muted-foreground">({provider.reviews.length} reviews)</span>
+          <Star className={'text-muted-foreground/30'} />
+          <span className="font-semibold">New</span>
+          <span className="text-muted-foreground">(0 reviews)</span>
         </div>
         <div className="text-primary font-semibold group-hover:underline">
           View Profile

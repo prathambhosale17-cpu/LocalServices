@@ -1,29 +1,49 @@
-import { providers, categories } from '@/lib/data';
+'use client';
+
+import { useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { collection } from 'firebase/firestore';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { categories } from '@/lib/data';
 import { ProviderCard } from '@/components/ProviderCard';
 import Link from 'next/link';
+import type { ProviderProfile } from '@/lib/types';
 
-export default function SearchPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-  const query = (searchParams.q as string || '').toLowerCase();
-  const location = (searchParams.loc as string || '').toLowerCase();
-  const categoryId = searchParams.cat as string || '';
+export default function SearchPage() {
+  const searchParams = useSearchParams();
+  const q = (searchParams.get('q') || '').toLowerCase();
+  const loc = (searchParams.get('loc') || '').toLowerCase();
+  const categoryId = searchParams.get('cat') || '';
 
-  const filteredProviders = providers.filter(provider => {
-    const categoryFromProvider = categories.find(c => c.name === provider.category);
-    const matchesCategory = categoryId ? categoryFromProvider?.id === categoryId : true;
-    
-    const matchesQuery = query ? 
-      provider.name.toLowerCase().includes(query) ||
-      provider.tagline.toLowerCase().includes(query) ||
-      provider.services.some(s => s.toLowerCase().includes(query)) : true;
-    
-    const matchesLocation = location ? provider.location.toLowerCase().includes(location) : true;
-    
-    return matchesCategory && matchesQuery && matchesLocation;
-  });
+  const firestore = useFirestore();
+  
+  const providersColRef = useMemoFirebase(() => collection(firestore, 'providers'), [firestore]);
+
+  const { data: providers, isLoading } = useCollection<ProviderProfile>(providersColRef);
+
+  const filteredProviders = useMemo(() => {
+    if (!providers) return [];
+
+    const categoryName = categories.find(c => c.id === categoryId)?.name;
+
+    return providers.filter(provider => {
+      const p = provider as ProviderProfile;
+      const matchesCategory = categoryName ? p.category === categoryName : true;
+      
+      const matchesQuery = q ? 
+        p.name.toLowerCase().includes(q) ||
+        (p.tagline && p.tagline.toLowerCase().includes(q)) ||
+        (p.services && p.services.some(s => s.toLowerCase().includes(q))) : true;
+      
+      const matchesLocation = loc ? p.location.toLowerCase().includes(loc) : true;
+      
+      return matchesCategory && matchesQuery && matchesLocation;
+    });
+  }, [providers, categoryId, q, loc]);
 
   const categoryName = categories.find(c => c.id === categoryId)?.name;
   
-  const title = categoryId ? `Browse ${categoryName}` : (query || location ? "Search Results" : "All Services");
+  const title = categoryId && categoryName ? `Browse ${categoryName}` : (q || loc ? "Search Results" : "All Services");
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
@@ -53,18 +73,24 @@ export default function SearchPage({ searchParams }: { searchParams: { [key: str
           <h1 className="text-3xl font-bold font-headline mb-2">
             {title}
           </h1>
-          <p className="text-muted-foreground mb-6">Found {filteredProviders.length} providers matching your criteria.</p>
-          {filteredProviders.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {filteredProviders.map(provider => (
-                <ProviderCard key={provider.id} provider={provider} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-24 border-2 border-dashed rounded-lg bg-card">
-              <h2 className="text-xl font-semibold mb-2">No providers found</h2>
-              <p className="text-muted-foreground max-w-sm mx-auto">Try adjusting your search terms, or select a different category to browse available services.</p>
-            </div>
+          
+          {isLoading && <p className="text-muted-foreground">Loading providers...</p>}
+          {!isLoading && providers && (
+            <>
+              <p className="text-muted-foreground mb-6">Found {filteredProviders.length} providers matching your criteria.</p>
+              {filteredProviders.length > 0 ? (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {filteredProviders.map(provider => (
+                    <ProviderCard key={provider.id} provider={provider} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-24 border-2 border-dashed rounded-lg bg-card">
+                  <h2 className="text-xl font-semibold mb-2">No providers found</h2>
+                  <p className="text-muted-foreground max-w-sm mx-auto">Try adjusting your search terms, or select a different category to browse available services.</p>
+                </div>
+              )}
+            </>
           )}
         </main>
       </div>
