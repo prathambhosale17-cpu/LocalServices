@@ -32,6 +32,7 @@ export function SearchBar() {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           aria-label="Search for a service"
+          suppressHydrationWarning
         />
       </div>
       <div className="relative flex-grow">
@@ -43,6 +44,7 @@ export function SearchBar() {
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           aria-label="Enter a location"
+          suppressHydrationWarning
         />
       </div>
       <Button type="submit" className="w-full md:w-auto">
