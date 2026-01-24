@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams, notFound } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { addDoc, collection } from 'firebase/firestore';
-import { useFirestore, useUser } from '@/firebase';
+import { doc, updateDoc } from 'firebase/firestore';
+import { useFirestore, useUser, useDoc, useMemoFirebase } from '@/firebase';
 import { categories } from '@/lib/data';
 
 import { Button } from '@/components/ui/button';
@@ -30,9 +30,10 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import type { ProviderProfile } from '@/lib/types';
 
 // Zod schema for form validation
 const providerSchema = z.object({
@@ -52,41 +53,54 @@ const providerSchema = z.object({
 
 type ProviderFormValues = z.infer<typeof providerSchema>;
 
-export default function ListYourBusinessPage() {
-  const [isSubmitted, setIsSubmitted] = useState(false);
+export default function EditBusinessPage() {
   const firestore = useFirestore();
   const { toast } = useToast();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
+  const params = useParams();
+  const providerId = params.id as string;
 
-  useEffect(() => {
-    if (!isUserLoading && !user) {
-      router.push('/login?redirect=/list-your-business');
-    }
-  }, [isUserLoading, user, router]);
+  const providerDocRef = useMemoFirebase(() => {
+    if (!firestore || !providerId) return null;
+    return doc(firestore, 'providers', providerId);
+  }, [firestore, providerId]);
+
+  const { data: provider, isLoading: isProviderLoading } = useDoc<ProviderProfile>(providerDocRef);
 
   const form = useForm<ProviderFormValues>({
     resolver: zodResolver(providerSchema),
     defaultValues: {
-      name: '',
-      category: '',
-      tagline: '',
-      location: '',
-      address: '',
-      phone: '',
-      website: '',
-      whatsapp: '',
-      email: '',
-      description: '',
-      services: '',
-      imageUrl: '',
+      name: '', category: '', tagline: '', location: '', address: '', phone: '',
+      website: '', whatsapp: '', email: '', description: '', services: '', imageUrl: '',
     },
   });
 
-  async function onSubmit(values: ProviderFormValues) {
-    if (!firestore || !user) return;
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/login');
+    }
+  }, [isUserLoading, user, router]);
 
-    // Transform services string to array
+  useEffect(() => {
+    if (provider) {
+      // Security check: ensure the current user owns this document
+      if (user && provider.userId !== user.uid) {
+        toast({ variant: 'destructive', title: 'Unauthorized', description: "You don't have permission to edit this listing." });
+        router.push('/profile');
+        return;
+      }
+
+      form.reset({
+        ...provider,
+        services: provider.services?.join(', ') || '',
+      });
+    }
+  }, [provider, user, router, form, toast]);
+
+  async function onSubmit(values: ProviderFormValues) {
+    if (!firestore || !user || !provider) return;
+
     const servicesArray = values.services
       ? values.services.split(',').map((s) => s.trim()).filter(Boolean)
       : [];
@@ -94,35 +108,34 @@ export default function ListYourBusinessPage() {
     const submissionData = {
       ...values,
       services: servicesArray,
-      userId: user.uid, // Add the user's ID
+      userId: user.uid, // Ensure userId is maintained
     };
     
-    const providersColRef = collection(firestore, 'providers');
-
-    addDoc(providersColRef, submissionData)
+    const providerRef = doc(firestore, 'providers', providerId);
+    updateDoc(providerRef, submissionData)
       .then(() => {
-        setIsSubmitted(true);
+        toast({ title: 'Update Successful', description: 'Your business listing has been updated.' });
+        router.push('/profile');
       })
       .catch((error) => {
-        console.error('Error submitting form:', error);
-
+        console.error('Error updating form:', error);
         const permissionError = new FirestorePermissionError({
-            path: providersColRef.path,
-            operation: 'create',
+            path: providerRef.path,
+            operation: 'update',
             requestResourceData: submissionData,
         });
-
         errorEmitter.emit('permission-error', permissionError);
-        
         toast({
           variant: 'destructive',
-          title: 'Submission Failed',
-          description: 'Could not submit your details. Please try again.',
+          title: 'Update Failed',
+          description: 'Could not update your details. Please try again.',
         });
       });
   }
 
-  if (isUserLoading || !user) {
+  const isLoading = isUserLoading || isProviderLoading;
+  
+  if (isLoading) {
     return (
         <div className="container mx-auto flex min-h-[calc(100vh-15rem)] items-center justify-center">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -130,29 +143,17 @@ export default function ListYourBusinessPage() {
     );
   }
 
-  if (isSubmitted) {
-    return (
-      <div className="container mx-auto px-4 md:px-6 py-12 text-center">
-        <Card className="max-w-2xl mx-auto shadow-xl">
-            <CardContent className="p-10">
-                <CheckCircle className="h-16 w-16 mx-auto text-green-500 mb-4" />
-                <h1 className="text-3xl font-bold font-headline mb-2">Thank You!</h1>
-                <p className="text-muted-foreground text-lg">
-                    Your business has been successfully listed and is now visible to everyone.
-                </p>
-            </CardContent>
-        </Card>
-      </div>
-    );
+  if (!provider) {
+    return notFound();
   }
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
       <Card className="max-w-3xl mx-auto shadow-xl">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold font-headline">List Your Business</CardTitle>
+          <CardTitle className="text-3xl font-bold font-headline">Edit Your Business</CardTitle>
           <CardDescription>
-            Fill out the form below to get your service listed on LocalFind.
+            Update the details for "{provider.name}" below.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -360,7 +361,7 @@ export default function ListYourBusinessPage() {
               />
 
               <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Submitting...' : 'Submit and Go Live'}
+                {form.formState.isSubmitting ? 'Saving Changes...' : 'Save Changes'}
               </Button>
             </form>
           </Form>

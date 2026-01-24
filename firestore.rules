@@ -62,11 +62,18 @@ service cloud.firestore {
                     && request.resource.data.location.size() > 1;
 
       /**
-       * @description Client-side updates/deletes are disabled to protect data integrity.
-       * @allow (update) Disabled for clients.
-       * @allow (delete) Disabled for clients.
+       * @description The owner of a profile can update it. The userId must not be changed.
+       * @allow (update) Authenticated users can update their own profile.
        */
-      allow update, delete: if false;
+      allow update: if request.auth != null
+                    && request.auth.uid == resource.data.userId
+                    && request.resource.data.userId == resource.data.userId;
+
+      /**
+       * @description The owner of a profile can delete it.
+       * @allow (delete) Authenticated users can delete their own profile.
+       */
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
 
       /*****************************************************************
        * REVIEWS SUBCOLLECTION
