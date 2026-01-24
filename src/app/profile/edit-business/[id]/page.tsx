@@ -92,8 +92,18 @@ export default function EditBusinessPage() {
       }
 
       form.reset({
-        ...provider,
+        name: provider.name || '',
+        category: provider.category || '',
+        tagline: provider.tagline || '',
+        location: provider.location || '',
+        address: provider.address || '',
+        phone: provider.phone || '',
+        website: provider.website || '',
+        whatsapp: provider.whatsapp || '',
+        email: provider.email || '',
+        description: provider.description || '',
         services: provider.services?.join(', ') || '',
+        imageUrl: provider.imageUrl || '',
       });
     }
   }, [provider, user, router, toast, form]);
