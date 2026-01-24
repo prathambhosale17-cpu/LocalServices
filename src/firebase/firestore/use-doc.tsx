@@ -44,7 +44,7 @@ export function useDoc<T = any>(
   type StateDataType = WithId<T> | null;
 
   const [data, setData] = useState<StateDataType>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<FirestoreError | Error | null>(null);
 
   useEffect(() => {
@@ -57,20 +57,13 @@ export function useDoc<T = any>(
 
     setIsLoading(true);
     setError(null);
-    // Optional: setData(null); // Clear previous data instantly
 
     const unsubscribe = onSnapshot(
       memoizedDocRef,
       (snapshot: DocumentSnapshot<DocumentData>) => {
         if (snapshot.exists()) {
           const newDoc = { ...(snapshot.data() as T), id: snapshot.id };
-          // Prevent re-render if data is the same
-          setData(currentDoc => {
-            if (currentDoc && JSON.stringify(currentDoc) === JSON.stringify(newDoc)) {
-                return currentDoc;
-            }
-            return newDoc;
-          });
+          setData(newDoc);
         } else {
           // Document does not exist
           setData(null);
