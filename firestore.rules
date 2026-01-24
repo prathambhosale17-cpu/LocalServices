@@ -67,6 +67,36 @@ service cloud.firestore {
        * @allow (delete) Disabled for clients.
        */
       allow update, delete: if false;
+
+      /*****************************************************************
+       * REVIEWS SUBCOLLECTION
+       *****************************************************************/
+      match /reviews/{reviewId} {
+        /**
+         * @description Reviews are public.
+         * @allow (get) Anyone can view a provider's reviews.
+         * @allow (list) Anyone can list/query reviews.
+         */
+        allow get, list: if true;
+
+        /**
+         * @description Authenticated users can submit a review.
+         * The submitted data must conform to the schema.
+         */
+        allow create: if request.auth != null
+                      && request.resource.data.userId == request.auth.uid
+                      && request.resource.data.providerId == providerId
+                      && request.resource.data.rating is number
+                      && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
+                      && request.resource.data.comment is string;
+
+        /**
+         * @description Client-side updates/deletes are disabled to protect data integrity.
+         * @allow (update) Disabled for clients.
+         * @allow (delete) Disabled for clients.
+         */
+        allow update, delete: if false;
+      }
     }
   }
 }

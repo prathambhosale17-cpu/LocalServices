@@ -43,9 +43,18 @@
           "type": "string",
           "description": "The physical location or service area."
         },
+        "address": {
+            "type": "string",
+            "description": "The full street address of the business."
+        },
         "phone": {
           "type": "string",
           "description": "Contact phone number."
+        },
+        "website": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the provider's website."
         },
         "whatsapp": {
           "type": "string",
@@ -78,6 +87,39 @@
         "category",
         "location"
       ]
+    },
+    "Review": {
+        "title": "Review",
+        "description": "A review for a service provider.",
+        "type": "object",
+        "properties": {
+            "providerId": {
+                "type": "string",
+                "description": "The ID of the provider being reviewed."
+            },
+            "userId": {
+                "type": "string",
+                "description": "The UID of the user who wrote the review."
+            },
+            "author": {
+                "type": "string",
+                "description": "The name of the user who wrote the review. Should be their email."
+            },
+            "rating": {
+                "type": "number",
+                "description": "The star rating given by the user (1-5)."
+            },
+            "comment": {
+                "type": "string",
+                "description": "The user's review comment."
+            },
+            "createdAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Timestamp of when the review was created."
+            }
+        },
+        "required": ["providerId", "userId", "author", "rating", "createdAt"]
     }
   },
   "auth": {
@@ -97,6 +139,12 @@
         "$ref": "#/backend/entities/ProviderProfile"
       },
       "description": "Stores the public profile for a service provider. The 'providerId' is a unique identifier."
+    },
+    "/providers/{providerId}/reviews/{reviewId}": {
+      "schema": {
+        "$ref": "#/backend/entities/Review"
+      },
+      "description": "Stores reviews for a specific provider."
     }
   }
 }

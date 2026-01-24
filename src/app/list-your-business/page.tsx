@@ -40,7 +40,9 @@ const providerSchema = z.object({
   category: z.string().min(1, 'Please select a category.'),
   tagline: z.string().max(100, 'Tagline is too long.').optional(),
   location: z.string().min(2, 'Location is required.'),
+  address: z.string().optional(),
   phone: z.string().optional(),
+  website: z.string().url('Please enter a valid website URL.').optional().or(z.literal('')),
   whatsapp: z.string().optional(),
   email: z.string().email('Invalid email address.').optional().or(z.literal('')),
   description: z.string().max(1000, 'Description is too long.').optional(),
@@ -70,7 +72,9 @@ export default function ListYourBusinessPage() {
       category: '',
       tagline: '',
       location: '',
+      address: '',
       phone: '',
+      website: '',
       whatsapp: '',
       email: '',
       description: '',
@@ -224,6 +228,20 @@ export default function ListYourBusinessPage() {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Address (Optional)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., 123 Main St, Anytown" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               
               <div className="grid md:grid-cols-2 gap-6">
                 <FormField
@@ -257,19 +275,34 @@ export default function ListYourBusinessPage() {
                 />
               </div>
 
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email Address (Optional)</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="e.g., contact@sharmaplumbing.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid md:grid-cols-2 gap-6">
+                 <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email Address (Optional)</FormLabel>
+                      <FormControl>
+                        <Input type="email" placeholder="e.g., contact@sharmaplumbing.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="website"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Website (Optional)</FormLabel>
+                      <FormControl>
+                        <Input type="url" placeholder="https://yourbusiness.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
                <FormField
                 control={form.control}

@@ -1,11 +1,14 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+'use client';
+
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Star } from 'lucide-react';
-import type { Review } from '@/lib/data';
+import type { Review as ReviewType } from '@/lib/types';
+import { formatDistanceToNow } from 'date-fns';
+import type { WithId } from '@/firebase';
 
-function StarRating({ rating, className }: { rating: number, className?: string }) {
+function StarRatingDisplay({ rating }: { rating: number }) {
   return (
-    <div className={`flex items-center gap-0.5 ${className}`}>
+    <div className="flex items-center gap-0.5">
       {[...Array(5)].map((_, i) => (
         <Star
           key={i}
@@ -16,19 +19,29 @@ function StarRating({ rating, className }: { rating: number, className?: string 
   );
 }
 
-export function ReviewCard({ review }: { review: Review }) {
+export function ReviewCard({ review }: { review: WithId<ReviewType> }) {
+  const getInitials = (name: string) => {
+    if (!name) return '?';
+    const parts = name.split('@');
+    return parts[0].charAt(0).toUpperCase();
+  };
+  
+  const date = review.createdAt?.toDate ? 
+    formatDistanceToNow(review.createdAt.toDate(), { addSuffix: true }) :
+    'just now';
+
   return (
-    <div className="flex items-start gap-4">
+    <div className="flex items-start gap-4 border-b pb-4 last:border-b-0 last:pb-0">
       <Avatar>
-        <AvatarFallback>{review.author.charAt(0)}</AvatarFallback>
+        <AvatarFallback>{getInitials(review.author)}</AvatarFallback>
       </Avatar>
       <div className="flex-1">
-        <div className="flex items-center justify-between">
-            <p className="font-semibold">{review.author}</p>
-            <StarRating rating={review.rating} />
+        <div className="flex items-center justify-between mb-1">
+            <p className="font-semibold text-sm">{review.author}</p>
+            <StarRatingDisplay rating={review.rating} />
         </div>
-        <p className="text-xs text-muted-foreground mb-2">{review.date}</p>
-        <p className="text-sm text-muted-foreground">{review.comment}</p>
+        <p className="text-xs text-muted-foreground mb-2">{date}</p>
+        <p className="text-sm text-foreground/80 whitespace-pre-wrap">{review.comment}</p>
       </div>
     </div>
   );
