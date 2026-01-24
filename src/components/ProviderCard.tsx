@@ -5,18 +5,41 @@ import Link from 'next/link';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Star, MapPin, ArrowRight } from 'lucide-react';
-import type { ProviderProfile } from '@/lib/types';
-import { useState, useEffect } from 'react';
+import type { ProviderProfile, Review } from '@/lib/types';
+import { useState, useEffect, useMemo } from 'react';
 import type { WithId } from '@/firebase';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, query } from 'firebase/firestore';
 
 export function ProviderCard({ provider }: { provider: WithId<ProviderProfile> }) {
   const fallbackSrc = `https://picsum.photos/seed/${provider.id}/600/400`;
   const [imgSrc, setImgSrc] = useState(provider.imageUrl || fallbackSrc);
+  const firestore = useFirestore();
+
+  const reviewsQuery = useMemoFirebase(() => {
+    if (!firestore || !provider.id) return null;
+    return query(collection(firestore, 'providers', provider.id, 'reviews'));
+  }, [firestore, provider.id]);
+
+  const { data: reviews } = useCollection<Review>(reviewsQuery);
+
+  const { avgRating, reviewCount } = useMemo(() => {
+    if (!reviews || reviews.length === 0) {
+      return { avgRating: 0, reviewCount: 0 };
+    }
+    const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return {
+      avgRating: totalRating / reviews.length,
+      reviewCount: reviews.length,
+    };
+  }, [reviews]);
 
   useEffect(() => {
     setImgSrc(provider.imageUrl || fallbackSrc);
   }, [provider.imageUrl, fallbackSrc]);
   
+  const hasReviews = reviewCount > 0;
+
   return (
     <Link href={`/provider/${provider.id}`} className="block h-full group">
       <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 shadow-md group-hover:shadow-xl group-hover:-translate-y-1 border">
@@ -46,9 +69,18 @@ export function ProviderCard({ provider }: { provider: WithId<ProviderProfile> }
       </CardContent>
       <CardFooter className="p-6 bg-transparent flex justify-between items-center text-sm">
           <div className="flex items-center gap-1 text-muted-foreground">
-          <Star className={'text-muted-foreground/30 h-4 w-4'} />
-          <span className="font-semibold">New</span>
-          <span>(0 reviews)</span>
+            <Star className={hasReviews ? 'text-yellow-400 fill-yellow-400 h-4 w-4' : 'text-muted-foreground/30 h-4 w-4'} />
+            {hasReviews ? (
+              <>
+                <span className="font-semibold">{avgRating.toFixed(1)}</span>
+                <span>({reviewCount} {reviewCount === 1 ? 'review' : 'reviews'})</span>
+              </>
+            ) : (
+              <>
+                <span className="font-semibold">New</span>
+                <span>(0 reviews)</span>
+              </>
+            )}
           </div>
           <div className="text-primary font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
           View Profile
