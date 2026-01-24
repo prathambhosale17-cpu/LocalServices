@@ -9,6 +9,8 @@ import { Suspense } from 'react';
 import { ProviderCard } from '@/components/ProviderCard';
 import type { ProviderProfile } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { categories } from '@/lib/data';
+import { Card } from '@/components/ui/card';
 
 
 export default function Home() {
@@ -34,6 +36,27 @@ export default function Home() {
           <Suspense fallback={<SearchBarFallback />}>
             <SearchBar />
           </Suspense>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold font-headline">
+              Browse by Category
+            </h2>
+            <p className="text-muted-foreground mt-3 text-lg max-w-2xl mx-auto">Find the right professional for your needs by browsing our service categories.</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-8">
+            {categories.map((category) => (
+              <Link key={category.id} href={`/search?cat=${category.id}`} className="block group">
+                <Card className="h-full text-center p-6 transition-all duration-300 shadow-md group-hover:shadow-xl group-hover:-translate-y-1 border hover:border-primary flex flex-col items-center justify-center aspect-square">
+                  <category.icon className="h-12 w-12 mx-auto text-primary mb-4" />
+                  <h3 className="font-semibold font-headline text-lg">{category.name}</h3>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
