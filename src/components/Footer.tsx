@@ -26,8 +26,11 @@ export function Footer() {
         </div>
       </div>
       <div className="bg-muted/50 py-6">
-        <div className="container mx-auto px-4 text-center text-sm">
+        <div className="container mx-auto px-4 text-center text-sm space-y-2">
           <p>&copy; {new Date().getFullYear()} LocalFind. All rights reserved.</p>
+          <p>
+            Developed by Pratham Bhosale | Idea by Partha Shekte
+          </p>
         </div>
       </div>
     </footer>
