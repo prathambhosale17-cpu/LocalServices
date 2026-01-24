@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, Suspense } from 'react';
+import { useMemo, Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { collection } from 'firebase/firestore';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
@@ -11,6 +11,12 @@ import type { ProviderProfile } from '@/lib/types';
 import { SearchBar, SearchBarFallback } from '@/components/SearchBar';
 
 export default function SearchPage() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const searchParams = useSearchParams();
   const q = (searchParams.get('q') || '').toLowerCase();
   const loc = (searchParams.get('loc') || '').toLowerCase();
@@ -81,8 +87,9 @@ export default function SearchPage() {
             </Suspense>
           </div>
           
-          {isLoading && <p className="text-muted-foreground">Loading providers...</p>}
-          {!isLoading && providers && (
+          {(isLoading || !isClient) && <p className="text-muted-foreground">Loading providers...</p>}
+          
+          {isClient && !isLoading && providers && (
             <>
               <p className="text-muted-foreground mb-8 text-lg">Found {filteredProviders.length} providers matching your criteria.</p>
               {filteredProviders.length > 0 ? (
