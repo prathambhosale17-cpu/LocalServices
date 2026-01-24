@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Trash2, Edit, Building } from 'lucide-react';
+import { Trash2, Edit, Building, MapPin, Phone, Globe } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,6 +26,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import { Badge } from '@/components/ui/badge';
 
 function BusinessProfileCard({ provider, onDelete }: { provider: WithId<ProviderProfile>, onDelete: (id: string) => void }) {
   return (
@@ -34,16 +35,70 @@ function BusinessProfileCard({ provider, onDelete }: { provider: WithId<Provider
         <CardTitle className="font-headline text-2xl flex items-center gap-3"><Building /> Your Business Listing</CardTitle>
         <CardDescription>This is the current profile for your business, "{provider.name}".</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div>
-          <h3 className="font-semibold">Category</h3>
-          <p className="text-muted-foreground">{provider.category}</p>
+      <CardContent className="space-y-6">
+        <div className="space-y-4">
+            <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <h3 className="font-semibold text-sm text-muted-foreground">Category</h3>
+                  <p>{provider.category}</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm text-muted-foreground">Location</h3>
+                  <p>{provider.location}</p>
+                </div>
+            </div>
+             {provider.tagline && (
+                <div>
+                  <h3 className="font-semibold text-sm text-muted-foreground">Tagline</h3>
+                  <p>{provider.tagline}</p>
+                </div>
+            )}
+             {provider.description && (
+                <div>
+                  <h3 className="font-semibold text-sm text-muted-foreground">About</h3>
+                  <p className="whitespace-pre-wrap">{provider.description}</p>
+                </div>
+            )}
+            {(provider.address || provider.phone || provider.website) && (
+              <div className="border-t pt-4 space-y-3">
+                  <h3 className="font-semibold">Contact Information</h3>
+                  {provider.address && (
+                      <div className="flex items-center gap-3 text-sm">
+                      <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <span>{provider.address}</span>
+                      </div>
+                  )}
+                  {provider.phone && (
+                      <div className="flex items-center gap-3 text-sm">
+                      <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <a href={`tel:${provider.phone}`} className="text-primary hover:underline">{provider.phone}</a>
+                      </div>
+                  )}
+                  {provider.website && (
+                      <div className="flex items-center gap-3 text-sm">
+                      <Globe className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <a href={provider.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline" >
+                          {provider.website}
+                      </a>
+                      </div>
+                  )}
+              </div>
+            )}
+
+
+             {provider.services && provider.services.length > 0 && (
+                <div className="border-t pt-4">
+                    <h3 className="font-semibold mb-2">Services Offered</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {provider.services.map(service => (
+                            <Badge key={service} variant="outline">{service}</Badge>
+                        ))}
+                    </div>
+                </div>
+              )}
         </div>
-        <div>
-          <h3 className="font-semibold">Location</h3>
-          <p className="text-muted-foreground">{provider.location}</p>
-        </div>
-        <div className="flex flex-wrap gap-4 pt-4">
+        
+        <div className="flex flex-wrap gap-4 pt-4 border-t">
           <Button asChild variant="outline">
             <Link href={`/profile/edit-business/${provider.id}`}>
               <Edit className="mr-2 h-4 w-4" /> Edit Listing
