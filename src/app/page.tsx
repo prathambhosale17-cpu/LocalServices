@@ -1,11 +1,26 @@
+'use client';
+
 import Link from 'next/link';
-import { categories } from '@/lib/data';
-import { Card, CardContent } from '@/components/ui/card';
+import { useMemo } from 'react';
+import { collection, query, limit } from 'firebase/firestore';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { SearchBar, SearchBarFallback } from '@/components/SearchBar';
 import { Suspense } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ProviderCard } from '@/components/ProviderCard';
+import type { ProviderProfile } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
+
 
 export default function Home() {
+  const firestore = useFirestore();
+
+  const providersQuery = useMemoFirebase(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'providers'), limit(6));
+  }, [firestore]);
+
+  const { data: providers, isLoading } = useCollection<ProviderProfile>(providersQuery);
+
   return (
     <>
       <section className="py-20 md:py-32 bg-primary text-primary-foreground">
@@ -26,29 +41,30 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold font-headline">
-              Explore Our Services
+              Featured Services
             </h2>
-            <p className="text-muted-foreground mt-3 text-lg max-w-2xl mx-auto">Find the right professional for any job, from home repairs to personal wellness.</p>
+            <p className="text-muted-foreground mt-3 text-lg max-w-2xl mx-auto">Discover top-rated professionals for any job, from home repairs to personal wellness.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((category) => (
-              <Link href={`/search?cat=${category.id}`} key={category.id} className="group">
-                <div className="bg-card p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border h-full flex flex-col items-start transform hover:-translate-y-2 hover:border-primary/50">
-                  <div className="bg-primary/10 p-4 rounded-lg mb-5">
-                    <category.icon className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="font-bold text-2xl mb-2 font-headline">{category.name}</h3>
-                  <p className="text-muted-foreground text-base flex-grow">
-                    Find top-rated professionals in the {category.name.toLowerCase()} sector.
-                  </p>
-                  <div className="flex items-center text-primary font-bold mt-6 text-sm tracking-wide">
-                    <span>View Services</span>
-                    <ArrowRight className="h-4 w-4 ml-2 transform transition-transform duration-300 group-hover:translate-x-1.5" />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {isLoading && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[...Array(6)].map((_, i) => (
+                <Skeleton key={i} className="h-[420px] w-full rounded-xl" />
+              ))}
+            </div>
+          )}
+          {providers && providers.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {providers.map((provider) => (
+                <ProviderCard provider={provider} key={provider.id} />
+              ))}
+            </div>
+          )}
+           {!isLoading && (!providers || providers.length === 0) && (
+             <div className="text-center py-24 border-2 border-dashed rounded-lg bg-card mt-12">
+                <h2 className="text-2xl font-semibold font-headline mb-2">No providers listed yet</h2>
+                <p className="text-muted-foreground max-w-sm mx-auto">Check back soon for new services in your area.</p>
+              </div>
+           )}
         </div>
       </section>
     </>
