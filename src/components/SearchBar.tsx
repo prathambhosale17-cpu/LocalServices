@@ -39,7 +39,7 @@ export function SearchBar() {
         <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Location, e.g., 'New York'"
+          placeholder="Location, e.g., 'Mumbai'"
           className="pl-10 text-base"
           value={location}
           onChange={(e) => setLocation(e.target.value)}

@@ -236,7 +236,7 @@ export default function ListYourBusinessPage() {
                   <FormItem>
                     <FormLabel>Full Address (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., 123 Main St, Anytown" {...field} />
+                      <Input placeholder="e.g., B-12, Sector 62, Noida" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

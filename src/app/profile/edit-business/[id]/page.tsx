@@ -117,6 +117,14 @@ export default function EditBusinessPage() {
 
     const submissionData = {
       ...values,
+      address: values.address || '',
+      phone: values.phone || '',
+      website: values.website || '',
+      whatsapp: values.whatsapp || '',
+      email: values.email || '',
+      description: values.description || '',
+      tagline: values.tagline || '',
+      imageUrl: values.imageUrl || '',
       services: servicesArray,
       userId: user.uid, // Ensure userId is maintained
     };
@@ -247,7 +255,7 @@ export default function EditBusinessPage() {
                   <FormItem>
                     <FormLabel>Full Address (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., 123 Main St, Anytown" {...field} />
+                      <Input placeholder="e.g., B-12, Sector 62, Noida" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
