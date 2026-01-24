@@ -96,7 +96,7 @@ export default function EditBusinessPage() {
         services: provider.services?.join(', ') || '',
       });
     }
-  }, [provider, user, router, toast]);
+  }, [provider, user, router, toast, form]);
 
   async function onSubmit(values: ProviderFormValues) {
     if (!firestore || !user || !provider) return;

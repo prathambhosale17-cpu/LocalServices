@@ -63,7 +63,14 @@ export function useDoc<T = any>(
       memoizedDocRef,
       (snapshot: DocumentSnapshot<DocumentData>) => {
         if (snapshot.exists()) {
-          setData({ ...(snapshot.data() as T), id: snapshot.id });
+          const newDoc = { ...(snapshot.data() as T), id: snapshot.id };
+          // Prevent re-render if data is the same
+          setData(currentDoc => {
+            if (currentDoc && JSON.stringify(currentDoc) === JSON.stringify(newDoc)) {
+                return currentDoc;
+            }
+            return newDoc;
+          });
         } else {
           // Document does not exist
           setData(null);
