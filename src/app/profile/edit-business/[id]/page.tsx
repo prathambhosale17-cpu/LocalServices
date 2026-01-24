@@ -96,7 +96,7 @@ export default function EditBusinessPage() {
         services: provider.services?.join(', ') || '',
       });
     }
-  }, [provider, user, router, form, toast]);
+  }, [provider, user, router, toast]);
 
   async function onSubmit(values: ProviderFormValues) {
     if (!firestore || !user || !provider) return;
@@ -133,7 +133,7 @@ export default function EditBusinessPage() {
       });
   }
 
-  const isLoading = isUserLoading || isProviderLoading;
+  const isLoading = isUserLoading || !providerId || isProviderLoading;
   
   if (isLoading) {
     return (
