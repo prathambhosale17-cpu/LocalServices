@@ -81,9 +81,7 @@ export default function SearchPage() {
               {filteredProviders.length > 0 ? (
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                   {filteredProviders.map(provider => (
-                    <Link href={`/provider/${provider.id}`} key={provider.id} className="block h-full group">
-                      <ProviderCard provider={provider} />
-                    </Link>
+                    <ProviderCard provider={provider} key={provider.id} />
                   ))}
                 </div>
               ) : (
