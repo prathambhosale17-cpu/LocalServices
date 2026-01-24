@@ -247,7 +247,7 @@ export default function ProviderProfilePage() {
               <div className="relative h-64 md:h-96 w-full">
                 <Image
                   src={imgSrc}
-                  alt={`Hero image for ${provider.name}`}
+                  alt={`Hero image for ${provider?.name || 'service provider'}`}
                   onError={() => setImgSrc(fallbackSrc)}
                   fill
                   className="object-cover"
@@ -258,15 +258,15 @@ export default function ProviderProfilePage() {
             </Card>
 
             <div className="space-y-2">
-                <Badge variant="secondary" className="uppercase text-sm tracking-wider">{provider.category}</Badge>
-                <h1 className="text-4xl md:text-5xl font-bold font-headline">{provider.name}</h1>
+                <Badge variant="secondary" className="uppercase text-sm tracking-wider">{provider?.category}</Badge>
+                <h1 className="text-4xl md:text-5xl font-bold font-headline">{provider?.name}</h1>
                 <StarRating rating={avgRating} count={reviewCount} />
             </div>
 
             <Card>
-              <CardHeader><CardTitle>About {provider.name}</CardTitle></CardHeader>
+              <CardHeader><CardTitle>About {provider?.name}</CardTitle></CardHeader>
               <CardContent>
-                <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{provider.description || 'No description provided.'}</p>
+                <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{provider?.description || 'No description provided.'}</p>
               </CardContent>
             </Card>
 
@@ -291,19 +291,19 @@ export default function ProviderProfilePage() {
                <Card className="shadow-lg">
                 <CardHeader><CardTitle className="font-headline text-xl">Business Information</CardTitle></CardHeader>
                 <CardContent className="space-y-4 text-sm">
-                  {provider.address && (
+                  {provider?.address && (
                     <div className="flex items-start gap-3">
                       <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
                       <span className="text-foreground">{provider.address}</span>
                     </div>
                   )}
-                  {provider.phone && (
+                  {provider?.phone && (
                     <div className="flex items-start gap-3">
                       <Phone className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
                       <a href={`tel:${provider.phone}`} className="text-primary hover:underline">{provider.phone}</a>
                     </div>
                   )}
-                  {provider.website && (
+                  {provider?.website && (
                     <div className="flex items-start gap-3">
                       <Globe className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
                       <a href={provider.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline" >
@@ -314,7 +314,7 @@ export default function ProviderProfilePage() {
                 </CardContent>
               </Card>
 
-              {provider.services && provider.services.length > 0 && (
+              {provider?.services && provider.services.length > 0 && (
                   <Card>
                       <CardHeader><CardTitle className="font-headline text-xl">Services Offered</CardTitle></CardHeader>
                       <CardContent>
