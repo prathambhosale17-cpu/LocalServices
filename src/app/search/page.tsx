@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { collection } from 'firebase/firestore';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
@@ -8,6 +8,7 @@ import { categories } from '@/lib/data';
 import { ProviderCard } from '@/components/ProviderCard';
 import Link from 'next/link';
 import type { ProviderProfile } from '@/lib/types';
+import { SearchBar, SearchBarFallback } from '@/components/SearchBar';
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -73,6 +74,12 @@ export default function SearchPage() {
           <h1 className="text-4xl font-bold font-headline mb-4">
             {title}
           </h1>
+
+          <div className="mb-8">
+            <Suspense fallback={<SearchBarFallback />}>
+              <SearchBar />
+            </Suspense>
+          </div>
           
           {isLoading && <p className="text-muted-foreground">Loading providers...</p>}
           {!isLoading && providers && (
