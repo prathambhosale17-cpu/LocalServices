@@ -240,7 +240,7 @@ export default function ProviderProfilePage() {
           Back to results
         </Button>
 
-        <div className="grid lg:grid-cols-3 gap-x-8 gap-y-12">
+        <div className="grid lg:grid-cols-3 gap-x-8 gap-y-8 lg:gap-y-12">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             <Card className="overflow-hidden shadow-lg">
@@ -259,7 +259,7 @@ export default function ProviderProfilePage() {
 
             <div className="space-y-2">
                 <Badge variant="secondary" className="uppercase text-sm tracking-wider">{provider?.category}</Badge>
-                <h1 className="text-4xl md:text-5xl font-bold font-headline">{provider?.name}</h1>
+                <h1 className="text-3xl md:text-5xl font-bold font-headline">{provider?.name}</h1>
                 <StarRating rating={avgRating} count={reviewCount} />
             </div>
 

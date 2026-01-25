@@ -8,7 +8,7 @@ export default function ContactPage() {
         <CardHeader>
           <CardTitle className="text-3xl font-bold font-headline">Contact Us</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6 text-lg">
+        <CardContent className="space-y-6 text-base md:text-lg">
           <p className="text-muted-foreground">
             Have questions or want to get in touch? Here's how you can reach us.
           </p>

@@ -75,7 +75,7 @@ export default function SearchPageContent() {
         </aside>
 
         <main className="col-span-1 md:col-span-3 min-w-0">
-          <h1 className="text-4xl font-bold font-headline mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold font-headline mb-4">
             {title}
           </h1>
 
@@ -97,7 +97,7 @@ export default function SearchPageContent() {
           
           {!isLoading && providers && (
             <>
-              <p className="text-muted-foreground mb-8 text-lg">Found {filteredProviders.length} providers matching your criteria.</p>
+              <p className="text-muted-foreground mb-8 text-base md:text-lg">Found {filteredProviders.length} providers matching your criteria.</p>
               {filteredProviders.length > 0 ? (
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                   {filteredProviders.map(provider => (

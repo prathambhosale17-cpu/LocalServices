@@ -58,7 +58,7 @@ export function ProviderCard({ provider }: { provider: WithId<ProviderProfile> }
       </CardHeader>
       <CardContent className="p-6 flex-grow">
           <Badge variant="secondary" className="mb-2 uppercase text-xs tracking-wider font-semibold">{provider.category}</Badge>
-          <CardTitle className="text-2xl mb-2 font-headline group-hover:text-primary transition-colors">
+          <CardTitle className="text-xl md:text-2xl mb-2 font-headline group-hover:text-primary transition-colors">
           {provider.name}
           </CardTitle>
           <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{provider.tagline || 'No tagline provided.'}</p>
