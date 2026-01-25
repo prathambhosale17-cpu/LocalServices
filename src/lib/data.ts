@@ -10,7 +10,7 @@ import {
   Wrench,
   Gavel,
   PawPrint,
-  Laptop,
+  HardDrive,
   KeyRound,
   Camera,
   type LucideIcon
@@ -189,7 +189,7 @@ export const categories: Category[] = [
   {
     id: 'it-computer-repair',
     name: 'IT & Computer Repair',
-    icon: Laptop,
+    icon: HardDrive,
     description: 'Get help with your laptop, desktop, and other IT-related issues.',
     subServices: [
         'Laptop Repair',
