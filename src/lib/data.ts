@@ -8,6 +8,11 @@ import {
   Truck,
   PartyPopper,
   Vote,
+  Wrench,
+  Gavel,
+  PawPrint,
+  Laptop,
+  KeyRound,
   type LucideIcon
 } from 'lucide-react';
 
@@ -72,5 +77,35 @@ export const categories: Category[] = [
     name: 'Election Services',
     icon: Vote,
     description: 'Find providers for election-related equipment, materials, and logistical support.',
+  },
+  {
+    id: 'appliance-repair',
+    name: 'Appliance Repair',
+    icon: Wrench,
+    description: 'Expert repair for your AC, fridge, washing machine, and other home appliances.',
+  },
+  {
+    id: 'legal-services',
+    name: 'Legal Services',
+    icon: Gavel,
+    description: 'Consult with local lawyers, notaries, and legal advisors for your needs.',
+  },
+  {
+    id: 'pet-services',
+    name: 'Pet Services',
+    icon: PawPrint,
+    description: 'Find veterinarians, groomers, and pet sitters for your furry friends.',
+  },
+  {
+    id: 'it-computer-repair',
+    name: 'IT & Computer Repair',
+    icon: Laptop,
+    description: 'Get help with your laptop, desktop, and other IT-related issues.',
+  },
+  {
+    id: 'real-estate',
+    name: 'Real Estate',
+    icon: KeyRound,
+    description: 'Connect with real estate agents and brokers for buying, selling, or renting property.',
   },
 ];
