@@ -7,6 +7,7 @@ import {
   BookOpen,
   Truck,
   PartyPopper,
+  Vote,
   type LucideIcon
 } from 'lucide-react';
 
@@ -65,5 +66,11 @@ export const categories: Category[] = [
     name: 'Events & Weddings',
     icon: PartyPopper,
     description: 'Find the best planners, photographers, and decorators for your special occasions.',
+  },
+  {
+    id: 'election-services',
+    name: 'Election Services',
+    icon: Vote,
+    description: 'Find providers for election-related equipment, materials, and logistical support.',
   },
 ];
