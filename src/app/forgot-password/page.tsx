@@ -66,7 +66,7 @@ export default function ForgotPasswordPage() {
   if (isSubmitted) {
     return (
         <div className="container mx-auto flex min-h-[calc(100vh-15rem)] items-center justify-center px-4 md:px-6">
-            <Card className="w-full max-w-md text-center shadow-xl">
+            <Card className="w-full max-w-md text-center shadow-lg">
                 <CardHeader>
                     <CardTitle className="text-3xl font-bold font-headline">Check Your Email</CardTitle>
                 </CardHeader>
@@ -83,7 +83,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="container mx-auto flex min-h-[calc(100vh-15rem)] items-center justify-center px-4 md:px-6">
-      <Card className="w-full max-w-md shadow-xl">
+      <Card className="w-full max-w-md shadow-lg">
         <CardHeader>
           <CardTitle className="text-3xl font-bold font-headline">Forgot Password</CardTitle>
           <CardDescription>Enter your email and we'll send you a link to reset your password.</CardDescription>

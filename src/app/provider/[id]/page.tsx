@@ -135,7 +135,7 @@ function ReviewForm({ providerId }: { providerId: string }) {
   }
 
   return (
-    <Card>
+    <Card className="shadow-lg">
       <CardHeader><CardTitle>Leave a Review</CardTitle></CardHeader>
       <CardContent>
         <Form {...form}>
@@ -263,7 +263,7 @@ export default function ProviderProfilePage() {
                 <StarRating rating={avgRating} count={reviewCount} />
             </div>
 
-            <Card>
+            <Card className="shadow-lg">
               <CardHeader><CardTitle>About {provider?.name}</CardTitle></CardHeader>
               <CardContent>
                 <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{provider?.description || 'No description provided.'}</p>
@@ -315,7 +315,7 @@ export default function ProviderProfilePage() {
               </Card>
 
               {provider?.services && provider.services.length > 0 && (
-                  <Card>
+                  <Card className="shadow-lg">
                       <CardHeader><CardTitle className="font-headline text-xl">Services Offered</CardTitle></CardHeader>
                       <CardContent>
                         <div className="flex flex-wrap gap-2">

@@ -167,7 +167,7 @@ export default function EditBusinessPage() {
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
-      <Card className="max-w-3xl mx-auto shadow-xl">
+      <Card className="max-w-3xl mx-auto shadow-lg">
         <CardHeader>
           <CardTitle className="text-3xl font-bold font-headline">Edit Your Business</CardTitle>
           <CardDescription>
