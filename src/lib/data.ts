@@ -1,4 +1,14 @@
-import { Home, Car, UtensilsCrossed, HeartPulse, ShoppingBag, Sparkles, Trees, Dog, type LucideIcon } from 'lucide-react';
+import {
+  Home,
+  Car,
+  UtensilsCrossed,
+  HeartPulse,
+  Sparkles,
+  BookOpen,
+  Truck,
+  PartyPopper,
+  type LucideIcon
+} from 'lucide-react';
 
 export interface Category {
   id: string;
@@ -12,48 +22,48 @@ export const categories: Category[] = [
     id: 'home-services',
     name: 'Home Services',
     icon: Home,
-    description: 'Expert solutions for plumbing, electrical, and all your home maintenance needs.',
+    description: 'Find trusted electricians, plumbers, carpenters, and painters for all your home needs.',
   },
   {
-    id: 'auto-repair',
-    name: 'Auto Repair',
+    id: 'tutors-education',
+    name: 'Tutors & Education',
+    icon: BookOpen,
+    description: 'Connect with experienced tutors and coaching classes for academic excellence.',
+  },
+  {
+    id: 'automobile-services',
+    name: 'Automobile',
     icon: Car,
-    description: 'Reliable mechanics for car servicing, repairs, and inspections.',
+    description: 'Reliable mechanics for car and bike repairs, servicing, and washing.',
   },
   {
-    id: 'restaurants',
-    name: 'Restaurants',
+    id: 'food-services',
+    name: 'Food & Catering',
     icon: UtensilsCrossed,
-    description: 'Discover local dining spots, from casual eateries to fine dining experiences.',
+    description: 'Discover local tiffin services, home chefs, and professional caterers.',
   },
   {
     id: 'health-wellness',
     name: 'Health & Wellness',
     icon: HeartPulse,
-    description: 'Find doctors, gyms, and wellness centers to support a healthy lifestyle.',
+    description: 'Access local doctors, gyms, yoga instructors, and wellness experts.',
   },
   {
-    id: 'retail-shopping',
-    name: 'Retail & Shopping',
-    icon: ShoppingBag,
-    description: 'Explore local shops and boutiques for unique products and great deals.',
+    id: 'movers-packers',
+    name: 'Movers & Packers',
+    icon: Truck,
+    description: 'Get professional and hassle-free services for your home or office relocation.',
   },
   {
-    id: 'beauty-spas',
-    name: 'Beauty & Spas',
+    id: 'beauty-salon',
+    name: 'Beauty & Salon',
     icon: Sparkles,
-    description: 'Indulge in relaxation with salons, spas, and personal care services.',
+    description: 'Pamper yourself with services from local salons, spas, and makeup artists.',
   },
   {
-    id: 'landscaping',
-    name: 'Landscaping',
-    icon: Trees,
-    description: 'Transform your outdoor spaces with professional garden and lawn care.',
-  },
-  {
-    id: 'pet-services',
-    name: 'Pet Services',
-    icon: Dog,
-    description: 'Top-quality care for your furry friends, from grooming to veterinary services.',
+    id: 'events-weddings',
+    name: 'Events & Weddings',
+    icon: PartyPopper,
+    description: 'Find the best planners, photographers, and decorators for your special occasions.',
   },
 ];
