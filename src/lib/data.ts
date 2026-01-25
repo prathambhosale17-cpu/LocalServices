@@ -7,7 +7,7 @@ import {
   BookOpen,
   Truck,
   PartyPopper,
-  Vote,
+  Megaphone,
   Wrench,
   Gavel,
   PawPrint,
@@ -136,8 +136,8 @@ export const categories: Category[] = [
   },
   {
     id: 'election-services',
-    name: 'Election Services',
-    icon: Vote,
+    name: 'Campaign & Election',
+    icon: Megaphone,
     description: 'Find providers for election-related equipment, materials, and logistical support.',
     subServices: [
         'Campaign Management',
