@@ -52,6 +52,9 @@ export function Header() {
         <Link href="/search">Browse Services</Link>
       </Button>
       <Button variant="ghost" asChild>
+        <Link href="/categories">All Categories</Link>
+      </Button>
+      <Button variant="ghost" asChild>
         <Link href="/contact">Contact</Link>
       </Button>
     </>
@@ -61,6 +64,9 @@ export function Header() {
      <div className="flex flex-col gap-2">
       <SheetClose asChild>
         <Link href="/search" className="text-lg py-2 font-medium">Browse Services</Link>
+      </SheetClose>
+       <SheetClose asChild>
+        <Link href="/categories" className="text-lg py-2 font-medium">All Categories</Link>
       </SheetClose>
        <SheetClose asChild>
         <Link href="/contact" className="text-lg py-2 font-medium">Contact</Link>
