@@ -50,6 +50,8 @@ export default function SignupPage() {
 
   async function onSubmit(values: SignupFormValues) {
     setIsLoading(true);
+    form.clearErrors();
+    
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
@@ -75,17 +77,18 @@ export default function SignupPage() {
       router.push('/profile');
     } catch (error) {
       console.error('Sign up failed:', error);
-      let description = 'An unexpected error occurred. Please try again.';
-      if (error instanceof FirebaseError) {
-        if (error.code === 'auth/email-already-in-use') {
-          description = 'This email is already registered. Please try logging in.';
-        }
+      if (error instanceof FirebaseError && error.code === 'auth/email-already-in-use') {
+        form.setError('email', {
+          type: 'manual',
+          message: 'This email is already registered. Please try logging in.',
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Sign Up Failed',
+          description: 'An unexpected error occurred. Please try again.',
+        });
       }
-      toast({
-        variant: 'destructive',
-        title: 'Sign Up Failed',
-        description,
-      });
     } finally {
         setIsLoading(false);
     }
