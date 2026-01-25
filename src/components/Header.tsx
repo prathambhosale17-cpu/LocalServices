@@ -55,6 +55,9 @@ export function Header() {
         <Link href="/categories">All Categories</Link>
       </Button>
       <Button variant="ghost" asChild>
+        <Link href="/about">About Us</Link>
+      </Button>
+      <Button variant="ghost" asChild>
         <Link href="/contact">Contact</Link>
       </Button>
     </>
@@ -67,6 +70,9 @@ export function Header() {
       </SheetClose>
        <SheetClose asChild>
         <Link href="/categories" className="text-lg py-2 font-medium">All Categories</Link>
+      </SheetClose>
+      <SheetClose asChild>
+        <Link href="/about" className="text-lg py-2 font-medium">About Us</Link>
       </SheetClose>
        <SheetClose asChild>
         <Link href="/contact" className="text-lg py-2 font-medium">Contact</Link>
