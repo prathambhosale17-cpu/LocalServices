@@ -19,6 +19,7 @@ import {
   SheetClose,
   SheetTrigger,
   SheetHeader,
+  SheetTitle,
 } from "@/components/ui/sheet"
 import { signOut } from 'firebase/auth';
 import { useAuth } from '@/firebase';
@@ -201,6 +202,7 @@ export function Header() {
                             <Handshake className="h-6 w-6 text-primary" />
                             <span className="font-headline">LocalFind</span>
                         </Link>
+                        <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
                         <SheetClose className="p-2">
                             <X className="h-6 w-6" />
                             <span className="sr-only">Close</span>
