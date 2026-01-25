@@ -7,12 +7,12 @@ import {
   BookOpen,
   Truck,
   PartyPopper,
-  Megaphone,
   Wrench,
   Gavel,
   PawPrint,
   Laptop,
   KeyRound,
+  Camera,
   type LucideIcon
 } from 'lucide-react';
 
@@ -135,16 +135,16 @@ export const categories: Category[] = [
     ]
   },
   {
-    id: 'election-services',
-    name: 'Campaign & Election',
-    icon: Megaphone,
-    description: 'Find providers for election-related equipment, materials, and logistical support.',
+    id: 'photography',
+    name: 'Photography',
+    icon: Camera,
+    description: 'Capture your special moments with professional photographers for any occasion.',
     subServices: [
-        'Campaign Management',
-        'Booth Management',
-        'Poster & Banner Printing',
-        'Social Media Promotion',
-        'Survey & Data Collection'
+        'Wedding Photography',
+        'Event Photography',
+        'Portrait Photoshoots',
+        'Product Photography',
+        'Drone Photography'
     ]
   },
   {
