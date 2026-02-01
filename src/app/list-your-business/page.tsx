@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { addDoc, collection } from 'firebase/firestore';
 import { useFirestore, useUser } from '@/firebase';
 import { categories } from '@/lib/data';
+import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -47,13 +48,14 @@ const providerSchema = z.object({
   email: z.string().email('Invalid email address.').optional().or(z.literal('')),
   description: z.string().max(1000, 'Description is too long.').optional(),
   services: z.string().optional(),
-  imageUrl: z.string().url('Please enter a valid image URL.').optional().or(z.literal('')),
+  imageUrl: z.string().optional(),
 });
 
 type ProviderFormValues = z.infer<typeof providerSchema>;
 
 export default function ListYourBusinessPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const firestore = useFirestore();
   const { toast } = useToast();
   const { user, isUserLoading } = useUser();
@@ -82,6 +84,24 @@ export default function ListYourBusinessPage() {
       imageUrl: '',
     },
   });
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) { // 2MB limit
+        form.setError('imageUrl', { type: 'manual', message: 'Image must be less than 2MB.' });
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setImagePreview(result);
+        form.setValue('imageUrl', result, { shouldValidate: true });
+        form.clearErrors('imageUrl');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   async function onSubmit(values: ProviderFormValues) {
     if (!firestore || !user) return;
@@ -345,19 +365,36 @@ export default function ListYourBusinessPage() {
               <FormField
                 control={form.control}
                 name="imageUrl"
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
-                    <FormLabel>Profile Image URL (Optional)</FormLabel>
+                    <FormLabel>Profile Image (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://example.com/your-image.jpg" {...field} />
+                      <Input
+                        type="file"
+                        accept="image/png, image/jpeg, image/gif"
+                        onChange={handleImageChange}
+                      />
                     </FormControl>
-                     <FormDescription>
-                      Direct link to a public image (e.g., from Imgur). Google Photos links will not work.
+                    <FormDescription>
+                      Upload a logo or profile picture. Max file size: 2MB.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
+              {imagePreview && (
+                <div className="mt-4 rounded-md border p-4">
+                  <p className="text-sm font-medium mb-2">Image Preview:</p>
+                  <Image
+                    src={imagePreview}
+                    alt="Image preview"
+                    width={150}
+                    height={150}
+                    className="rounded-md object-cover aspect-square"
+                  />
+                </div>
+              )}
 
               <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? 'Submitting...' : 'Submit and Go Live'}
