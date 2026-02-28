@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { MapPin, Phone, Globe, Star, ArrowLeft, Send } from 'lucide-react';
+import { MapPin, Phone, Globe, Star, ArrowLeft, Send, Share2 } from 'lucide-react';
 import { notFound, useParams, useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useState, useEffect, useMemo } from 'react';
@@ -192,6 +192,7 @@ export default function ProviderProfilePage() {
   const router = useRouter();
   const id = params.id as string;
   const firestore = useFirestore();
+  const { toast } = useToast();
 
   const providerRef = useMemoFirebase(() => doc(firestore, 'providers', id), [firestore, id]);
   const { data: provider, isLoading: isProviderLoading } = useDoc<ProviderProfile>(providerRef);
@@ -222,6 +223,28 @@ export default function ProviderProfilePage() {
     }
   }, [provider, fallbackSrc]);
   
+  const handleShare = () => {
+    const shareData = {
+      title: provider?.name || 'LocalFind Service Provider',
+      text: provider?.tagline || `Check out ${provider?.name} on LocalFind!`,
+      url: window.location.href,
+    };
+
+    if (navigator.share && navigator.canShare(shareData)) {
+      navigator.share(shareData).catch((err) => {
+        if (err.name !== 'AbortError') {
+           console.error('Error sharing:', err);
+        }
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: 'Link Copied',
+        description: 'Profile link copied to clipboard.',
+      });
+    }
+  };
+
   const isLoading = isProviderLoading || areReviewsLoading;
 
   if (isLoading) {
@@ -235,10 +258,16 @@ export default function ProviderProfilePage() {
   return (
     <div className="bg-muted/20">
       <div className="container mx-auto px-4 md:px-6 py-8">
-        <Button variant="ghost" onClick={() => router.back()} className="mb-6">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to results
-        </Button>
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <Button variant="ghost" onClick={() => router.back()}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to results
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleShare}>
+            <Share2 className="mr-2 h-4 w-4" />
+            Share Profile
+          </Button>
+        </div>
 
         <div className="grid lg:grid-cols-3 gap-x-8 gap-y-8 lg:gap-y-12">
           {/* Main Content */}
