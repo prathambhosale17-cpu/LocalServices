@@ -20,7 +20,7 @@ export default function ContactPage() {
           </div>
           <div className="flex items-center gap-4">
             <Phone className="h-6 w-6 text-primary" />
-            <span>+91 12345 67890</span>
+            <span>+91 8668798776</span>
           </div>
            <div className="pt-4">
             <h3 className="font-semibold text-xl mb-2">Business Inquiries</h3>
