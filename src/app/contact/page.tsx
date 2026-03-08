@@ -14,8 +14,8 @@ export default function ContactPage() {
           </p>
           <div className="flex items-center gap-4">
             <Mail className="h-6 w-6 text-primary" />
-            <a href="mailto:contact@localfind.com" className="hover:underline">
-              contact@localfind.com
+            <a href="mailto:bhosalepratham53@gmail.com" className="hover:underline">
+              bhosalepratham53@gmail.com
             </a>
           </div>
           <div className="flex items-center gap-4">

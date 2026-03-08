@@ -92,7 +92,7 @@ export default function PrivacyPolicyPage() {
               <p className="opacity-90 max-w-xl mx-auto">
                 If you have any questions about this Privacy Policy or our data practices, please contact our support team.
               </p>
-              <p className="text-xl font-semibold">contact@localfind.com</p>
+              <p className="text-xl font-semibold">bhosalepratham53@gmail.com</p>
             </CardContent>
           </Card>
         </div>
