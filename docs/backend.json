@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "UserProfile": {
@@ -120,6 +121,16 @@
             }
         },
         "required": ["providerId", "userId", "author", "rating", "createdAt"]
+    },
+    "Favorite": {
+      "title": "Favorite",
+      "description": "A user's saved service provider.",
+      "type": "object",
+      "properties": {
+        "providerId": { "type": "string" },
+        "addedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["providerId", "addedAt"]
     }
   },
   "auth": {
@@ -133,6 +144,12 @@
             "$ref": "#/backend/entities/UserProfile"
         },
         "description": "Stores user profile data, keyed by their auth UID."
+    },
+    "/users/{userId}/favorites/{providerId}": {
+      "schema": {
+        "$ref": "#/backend/entities/Favorite"
+      },
+      "description": "Stores a user's favorite service providers."
     },
     "/providers/{providerId}": {
       "schema": {

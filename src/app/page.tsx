@@ -9,10 +9,16 @@ import { SearchBar, SearchBarFallback } from '@/components/SearchBar';
 import { Suspense } from 'react';
 import { ProviderCard } from '@/components/ProviderCard';
 import type { ProviderProfile } from '@/lib/types';
-import { Skeleton } from '@/components/ui/skeleton';
+import { ProviderSkeleton } from '@/components/ProviderSkeleton';
 import { categories } from '@/lib/data';
 import { Card } from '@/components/ui/card';
-import { Clock } from 'lucide-react';
+import { Clock, HelpCircle } from 'lucide-react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 function RecentSearches() {
   const [searches, setSearches] = useState<any[]>([]);
@@ -50,6 +56,49 @@ function RecentSearches() {
   );
 }
 
+function FAQSection() {
+  const faqs = [
+    {
+      question: "How do I list my business on LocalFind?",
+      answer: "Listing your business is easy! Simply sign up for an account, click the 'List Your Business' button in the header, and fill out your profile details. Your listing will go live immediately."
+    },
+    {
+      question: "Is LocalFind free to use?",
+      answer: "Yes, LocalFind is completely free for both users looking for services and service providers listing their businesses."
+    },
+    {
+      question: "How can I contact a service provider?",
+      answer: "You can find contact details like phone numbers, email addresses, and websites directly on each service provider's profile page."
+    },
+    {
+      question: "Can I review a service I've used?",
+      answer: "Absolutely! We encourage users to leave honest reviews and ratings on provider profiles to help the community make informed decisions. You just need to be logged in to leave a review."
+    }
+  ];
+
+  return (
+    <section className="py-16 md:py-24 bg-card">
+      <div className="container mx-auto px-4 md:px-6 max-w-4xl">
+        <div className="text-center mb-12">
+          <HelpCircle className="h-12 w-12 mx-auto text-primary mb-4" />
+          <h2 className="text-4xl font-bold font-headline">Frequently Asked Questions</h2>
+          <p className="text-muted-foreground mt-3 text-lg">Everything you need to know about using LocalFind.</p>
+        </div>
+        <Accordion type="single" collapsible className="w-full">
+          {faqs.map((faq, index) => (
+            <AccordionItem key={index} value={`item-${index}`}>
+              <AccordionTrigger className="text-left font-semibold text-lg">{faq.question}</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const firestore = useFirestore();
 
@@ -75,7 +124,6 @@ export default function Home() {
           </Suspense>
           <RecentSearches />
         </div>
-        {/* Decorative background element */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
           <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-white rounded-full blur-3xl" />
           <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-white rounded-full blur-3xl" />
@@ -114,7 +162,7 @@ export default function Home() {
           {isLoading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(6)].map((_, i) => (
-                <Skeleton key={i} className="h-[420px] w-full rounded-xl" />
+                <ProviderSkeleton key={i} />
               ))}
             </div>
           )}
@@ -133,6 +181,8 @@ export default function Home() {
            )}
         </div>
       </section>
+
+      <FAQSection />
     </>
   );
 }
