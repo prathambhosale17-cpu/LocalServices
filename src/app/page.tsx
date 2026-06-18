@@ -19,6 +19,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Badge } from '@/components/ui/badge';
 
 function RecentSearches() {
   const [searches, setSearches] = useState<any[]>([]);
@@ -102,12 +103,30 @@ function FAQSection() {
 export default function Home() {
   const firestore = useFirestore();
 
-  const providersQuery = useMemoFirebase(() => {
+  // Query for featured providers (limited)
+  const featuredProvidersQuery = useMemoFirebase(() => {
     if (!firestore) return null;
     return query(collection(firestore, 'providers'), limit(6));
   }, [firestore]);
 
-  const { data: providers, isLoading } = useCollection<ProviderProfile>(providersQuery);
+  const { data: featuredProviders, isLoading: isFeaturedLoading } = useCollection<ProviderProfile>(featuredProvidersQuery);
+
+  // Query all providers to calculate category counts
+  const allProvidersQuery = useMemoFirebase(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'providers'));
+  }, [firestore]);
+
+  const { data: allProviders } = useCollection<ProviderProfile>(allProvidersQuery);
+
+  // Calculate counts per category
+  const categoryCounts = useMemo(() => {
+    if (!allProviders) return {};
+    return allProviders.reduce((acc, p) => {
+      acc[p.category] = (acc[p.category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+  }, [allProviders]);
 
   return (
     <>
@@ -139,14 +158,22 @@ export default function Home() {
             <p className="text-muted-foreground mt-3 text-lg max-w-2xl mx-auto">Find the right professional for your needs by browsing our service categories.</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-8">
-            {categories.map((category) => (
-              <Link key={category.id} href={`/search?cat=${category.id}`} className="block group">
-                <Card className="h-full text-center p-6 transition-all duration-300 shadow-md group-hover:shadow-xl group-hover:-translate-y-1 border hover:border-primary flex flex-col items-center justify-center aspect-square">
-                  <category.icon className="h-12 w-12 mx-auto text-primary mb-4" />
-                  <h3 className="font-semibold font-headline text-lg">{category.name}</h3>
-                </Card>
-              </Link>
-            ))}
+            {categories.map((category) => {
+              const count = categoryCounts[category.name] || 0;
+              return (
+                <Link key={category.id} href={`/search?cat=${category.id}`} className="block group relative">
+                  <Card className="h-full text-center p-6 transition-all duration-300 shadow-md group-hover:shadow-xl group-hover:-translate-y-1 border hover:border-primary flex flex-col items-center justify-center aspect-square">
+                    {count > 0 && (
+                      <Badge variant="secondary" className="absolute top-3 right-3 bg-primary/10 text-primary border-none font-bold">
+                        {count}
+                      </Badge>
+                    )}
+                    <category.icon className="h-12 w-12 mx-auto text-primary mb-4" />
+                    <h3 className="font-semibold font-headline text-lg">{category.name}</h3>
+                  </Card>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -159,21 +186,21 @@ export default function Home() {
             </h2>
             <p className="text-muted-foreground mt-3 text-lg max-w-2xl mx-auto">Discover top-rated professionals for any job, from home repairs to personal wellness.</p>
           </div>
-          {isLoading && (
+          {isFeaturedLoading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(6)].map((_, i) => (
                 <ProviderSkeleton key={i} />
               ))}
             </div>
           )}
-          {providers && providers.length > 0 && (
+          {featuredProviders && featuredProviders.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {providers.map((provider) => (
+              {featuredProviders.map((provider) => (
                 <ProviderCard provider={provider} key={provider.id} />
               ))}
             </div>
           )}
-           {!isLoading && (!providers || providers.length === 0) && (
+           {!isFeaturedLoading && (!featuredProviders || featuredProviders.length === 0) && (
              <div className="text-center py-24 border-2 border-dashed rounded-lg bg-card mt-12">
                 <h2 className="text-2xl font-semibold font-headline mb-2">No providers listed yet</h2>
                 <p className="text-muted-foreground max-w-sm mx-auto">Check back soon for new services in your area.</p>
