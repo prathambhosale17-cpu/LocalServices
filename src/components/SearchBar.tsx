@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -13,11 +14,25 @@ export function SearchBar() {
   const [keyword, setKeyword] = useState(searchParams.get('q') || '');
   const [location, setLocation] = useState(searchParams.get('loc') || '');
 
+  const saveSearch = (q: string, loc: string) => {
+    if (!q && !loc) return;
+    try {
+      const recent = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+      const newSearch = { q, loc, id: Date.now() };
+      // Filter out duplicates and limit to 5
+      const filtered = [newSearch, ...recent.filter((s: any) => !(s.q === q && s.loc === loc))].slice(0, 5);
+      localStorage.setItem('recentSearches', JSON.stringify(filtered));
+      // Dispatch custom event to notify homepage
+      window.dispatchEvent(new Event('recentSearchesUpdated'));
+    } catch (e) {}
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const params = new URLSearchParams();
     if (keyword) params.set('q', keyword);
     if (location) params.set('loc', location);
+    saveSearch(keyword, location);
     router.push(`/search?${params.toString()}`);
   };
 

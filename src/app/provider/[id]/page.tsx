@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -21,6 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 import Link from 'next/link';
+import placeholderData from '@/app/lib/placeholder-images.json';
 
 function ProviderLoadingSkeleton() {
   return (
@@ -193,6 +195,7 @@ export default function ProviderProfilePage() {
   const id = params.id as string;
   const firestore = useFirestore();
   const { toast } = useToast();
+  const placeholder = placeholderData['provider-placeholder'];
 
   const providerRef = useMemoFirebase(() => doc(firestore, 'providers', id), [firestore, id]);
   const { data: provider, isLoading: isProviderLoading } = useDoc<ProviderProfile>(providerRef);
@@ -227,7 +230,7 @@ export default function ProviderProfilePage() {
     const shareData = {
       title: provider?.name || 'LocalFind Service Provider',
       text: provider?.tagline || `Check out ${provider?.name} on LocalFind!`,
-      url: window.location.href,
+      url: typeof window !== 'undefined' ? window.location.href : '',
     };
 
     if (navigator.share && navigator.canShare(shareData)) {
@@ -272,7 +275,7 @@ export default function ProviderProfilePage() {
         <div className="grid lg:grid-cols-3 gap-x-8 gap-y-8 lg:gap-y-12">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            <Card className="overflow-hidden shadow-lg">
+            <Card className="overflow-hidden shadow-lg border-none">
               <div className="relative h-64 md:h-96 w-full">
                 <Image
                   src={imgSrc}
@@ -281,6 +284,8 @@ export default function ProviderProfilePage() {
                   fill
                   className="object-cover"
                   priority
+                  placeholder="blur"
+                  blurDataURL={placeholder.blurDataURL}
                   data-ai-hint="business service"
                 />
               </div>

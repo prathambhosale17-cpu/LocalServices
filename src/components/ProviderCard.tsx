@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -10,8 +11,10 @@ import { useState, useEffect, useMemo } from 'react';
 import type { WithId } from '@/firebase';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
+import placeholderData from '@/app/lib/placeholder-images.json';
 
 export function ProviderCard({ provider }: { provider: WithId<ProviderProfile> }) {
+  const placeholder = placeholderData['provider-placeholder'];
   const fallbackSrc = `https://picsum.photos/seed/${provider.id}/600/400`;
   const [imgSrc, setImgSrc] = useState(provider.imageUrl || fallbackSrc);
   const firestore = useFirestore();
@@ -52,6 +55,9 @@ export function ProviderCard({ provider }: { provider: WithId<ProviderProfile> }
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              placeholder="blur"
+              blurDataURL={placeholder.blurDataURL}
+              loading="lazy"
               data-ai-hint="service provider"
           />
           </div>

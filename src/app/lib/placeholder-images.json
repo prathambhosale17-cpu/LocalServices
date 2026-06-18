@@ -1,0 +1,17 @@
+
+{
+  "provider-placeholder": {
+    "id": "provider-placeholder",
+    "description": "General service provider placeholder",
+    "imageUrl": "https://picsum.photos/seed/service/600/400",
+    "imageHint": "business service",
+    "blurDataURL": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8QMNo7pS6gAAAABJRU5ErkJggg=="
+  },
+  "hero-placeholder": {
+    "id": "hero-placeholder",
+    "description": "Hero section background",
+    "imageUrl": "https://picsum.photos/seed/hero/1200/800",
+    "imageHint": "community services",
+    "blurDataURL": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8QMNo7pS6gAAAABJRU5ErkJggg=="
+  }
+}
