@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -56,6 +57,7 @@ type ProviderFormValues = z.infer<typeof providerSchema>;
 
 export default function EditBusinessPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const firestore = useFirestore();
   const { toast } = useToast();
   const { user, isUserLoading } = useUser();
@@ -135,6 +137,8 @@ export default function EditBusinessPage() {
   async function onSubmit(values: ProviderFormValues) {
     if (!firestore || !user || !provider) return;
 
+    setIsSubmitting(true);
+
     const servicesArray = values.services
       ? values.services.split(',').map((s) => s.trim()).filter(Boolean)
       : [];
@@ -150,15 +154,13 @@ export default function EditBusinessPage() {
       tagline: values.tagline || '',
       imageUrl: values.imageUrl || '',
       services: servicesArray,
-      userId: user.uid, // Ensure userId is maintained
+      userId: user.uid,
     };
     
     const providerRef = doc(firestore, 'providers', providerId);
+    
+    // Initiation of write operation (non-blocking)
     updateDoc(providerRef, submissionData)
-      .then(() => {
-        toast({ title: 'Update Successful', description: 'Your business listing has been updated.' });
-        router.push('/profile');
-      })
       .catch((error) => {
         console.error('Error updating form:', error);
         const permissionError = new FirestorePermissionError({
@@ -172,7 +174,15 @@ export default function EditBusinessPage() {
           title: 'Update Failed',
           description: 'Could not update your details. Please try again.',
         });
+        setIsSubmitting(false);
       });
+
+    // Provide feedback and ensure the loading animation is visible to the user
+    setTimeout(() => {
+        setIsSubmitting(false);
+        toast({ title: 'Update Successful', description: 'Your business listing has been updated.' });
+        router.push('/profile');
+    }, 1200);
   }
 
   const isLoading = isUserLoading || !providerId || isProviderLoading;
@@ -420,8 +430,8 @@ export default function EditBusinessPage() {
               )}
 
 
-              <Button type="submit" size="lg" className="w-full md:w-auto" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? (
+              <Button type="submit" size="lg" className="w-full md:w-auto" disabled={isSubmitting}>
+                {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Saving Changes...

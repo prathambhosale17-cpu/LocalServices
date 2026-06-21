@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { MapPin, Phone, Globe, Star, ArrowLeft, Send, Share2 } from 'lucide-react';
+import { MapPin, Phone, Globe, Star, ArrowLeft, Send, Share2, Loader2 } from 'lucide-react';
 import { notFound, useParams, useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useState, useEffect, useMemo } from 'react';
@@ -100,6 +100,7 @@ function ReviewForm({ providerId }: { providerId: string }) {
   const firestore = useFirestore();
   const { toast } = useToast();
   const [hoverRating, setHoverRating] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<ReviewFormValues>({
     resolver: zodResolver(reviewSchema),
@@ -110,6 +111,8 @@ function ReviewForm({ providerId }: { providerId: string }) {
 
   const handleReviewSubmit = (values: ReviewFormValues) => {
     if (!user || !firestore) return;
+
+    setIsSubmitting(true);
     
     const reviewData = {
       providerId,
@@ -121,11 +124,9 @@ function ReviewForm({ providerId }: { providerId: string }) {
     };
     
     const reviewsColRef = collection(firestore, 'providers', providerId, 'reviews');
+    
+    // Initiation of write operation (non-blocking)
     addDoc(reviewsColRef, reviewData)
-      .then(() => {
-        toast({ title: 'Review Submitted', description: 'Thank you for your feedback!' });
-        form.reset();
-      })
       .catch(error => {
         console.error('Review submission failed:', error);
         const permissionError = new FirestorePermissionError({
@@ -135,7 +136,15 @@ function ReviewForm({ providerId }: { providerId: string }) {
         });
         errorEmitter.emit('permission-error', permissionError);
         toast({ variant: 'destructive', title: 'Submission Failed', description: 'Could not submit your review.' });
+        setIsSubmitting(false);
       });
+
+    // Proceed immediately but with a small delay for the loading animation feedback
+    setTimeout(() => {
+        setIsSubmitting(false);
+        toast({ title: 'Review Submitted', description: 'Thank you for your feedback!' });
+        form.reset();
+    }, 1000);
   };
 
   if (!user) {
@@ -189,9 +198,18 @@ function ReviewForm({ providerId }: { providerId: string }) {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              <Send className="mr-2 h-4 w-4" />
-              {form.formState.isSubmitting ? 'Submitting...' : 'Submit Review'}
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <Send className="mr-2 h-4 w-4" />
+                  Submit Review
+                </>
+              )}
             </Button>
           </form>
         </Form>

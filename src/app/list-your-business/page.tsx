@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -55,6 +56,7 @@ type ProviderFormValues = z.infer<typeof providerSchema>;
 
 export default function ListYourBusinessPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const firestore = useFirestore();
   const { toast } = useToast();
@@ -106,7 +108,8 @@ export default function ListYourBusinessPage() {
   async function onSubmit(values: ProviderFormValues) {
     if (!firestore || !user) return;
 
-    // Transform services string to array
+    setIsSubmitting(true);
+
     const servicesArray = values.services
       ? values.services.split(',').map((s) => s.trim()).filter(Boolean)
       : [];
@@ -114,32 +117,34 @@ export default function ListYourBusinessPage() {
     const submissionData = {
       ...values,
       services: servicesArray,
-      userId: user.uid, // Add the user's ID
+      userId: user.uid,
     };
     
     const providersColRef = collection(firestore, 'providers');
 
+    // Initiation of write operation (non-blocking)
     addDoc(providersColRef, submissionData)
-      .then(() => {
-        setIsSubmitted(true);
-      })
       .catch((error) => {
         console.error('Error submitting form:', error);
-
         const permissionError = new FirestorePermissionError({
             path: providersColRef.path,
             operation: 'create',
             requestResourceData: submissionData,
         });
-
         errorEmitter.emit('permission-error', permissionError);
-        
         toast({
           variant: 'destructive',
           title: 'Submission Failed',
           description: 'Could not submit your details. Please try again.',
         });
+        setIsSubmitting(false);
       });
+
+    // Provide immediate feedback and ensure the loading animation is visible to the user
+    setTimeout(() => {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+    }, 1200);
   }
 
   if (isUserLoading || !user) {
@@ -396,8 +401,8 @@ export default function ListYourBusinessPage() {
                 </div>
               )}
 
-              <Button type="submit" size="lg" className="w-full md:w-auto" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? (
+              <Button type="submit" size="lg" className="w-full md:w-auto" disabled={isSubmitting}>
+                {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Submitting...
