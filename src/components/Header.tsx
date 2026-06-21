@@ -106,6 +106,9 @@ export function Header() {
                 <DropdownMenuItem onClick={() => setLanguage('hi')} className={language === 'hi' ? 'bg-primary/10 font-bold' : ''}>
                   हिन्दी
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage('mr')} className={language === 'mr' ? 'bg-primary/10 font-bold' : ''}>
+                  मराठी
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -184,6 +187,7 @@ export function Header() {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setLanguage('en')}>English</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setLanguage('hi')}>हिन्दी</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage('mr')}>मराठी</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Button variant="ghost" size="icon" onClick={toggleTheme}>

@@ -6,7 +6,7 @@ import { Language, dictionaries } from './dictionaries';
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (path: string) => string;
+  t: (path: string, variables?: Record<string, any>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -16,7 +16,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const savedLang = localStorage.getItem('language') as Language;
-    if (savedLang && (savedLang === 'en' || savedLang === 'hi')) {
+    if (savedLang && ['en', 'hi', 'mr'].includes(savedLang)) {
       setLanguageState(savedLang);
     }
   }, []);
@@ -26,13 +26,20 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('language', lang);
   };
 
-  const t = (path: string): string => {
+  const t = (path: string, variables?: Record<string, any>): string => {
     const keys = path.split('.');
     let result: any = dictionaries[language];
     for (const key of keys) {
       if (result[key] === undefined) return path;
       result = result[key];
     }
+    
+    if (typeof result === 'string' && variables) {
+      Object.entries(variables).forEach(([key, value]) => {
+        result = result.replace(`{{${key}}}`, String(value));
+      });
+    }
+    
     return result;
   };
 

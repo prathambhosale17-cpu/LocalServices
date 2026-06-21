@@ -1,4 +1,4 @@
-export type Language = 'en' | 'hi';
+export type Language = 'en' | 'hi' | 'mr';
 
 export const dictionaries = {
   en: {
@@ -19,7 +19,7 @@ export const dictionaries = {
       company: 'Company',
       privacyPolicy: 'Privacy Policy',
       rights: 'All rights reserved.',
-      developedBy: 'matru Tecnologi',
+      developedBy: 'Pratham Bhosale',
     },
     home: {
       heroTitle: 'Find Local Services, Instantly.',
@@ -34,7 +34,11 @@ export const dictionaries = {
     },
     search: {
       placeholder: "Service, e.g., 'plumber'",
-      locationPlaceholder: "Location, e.g., 'Mumbai'",
+      locationPlaceholder: "Location, e.g., 'Noida'",
+      results: 'Search Results',
+      found: 'Found {{count}} providers matching your criteria.',
+      noResults: 'No providers found',
+      noResultsSub: 'Try adjusting your search terms, or select a different category or location.',
     }
   },
   hi: {
@@ -55,7 +59,7 @@ export const dictionaries = {
       company: 'कंपनी',
       privacyPolicy: 'गोपनीयता नीति',
       rights: 'सर्वाधिकार सुरक्षित।',
-      developedBy: 'मातृ टेक्नोलॉजी (matru Tecnologi)',
+      developedBy: 'प्रथम भोसले (Pratham Bhosale)',
     },
     home: {
       heroTitle: 'स्थानीय सेवाएं तुरंत खोजें।',
@@ -70,7 +74,51 @@ export const dictionaries = {
     },
     search: {
       placeholder: "सेवा, जैसे 'प्लंबर'",
-      locationPlaceholder: "स्थान, जैसे 'मुंबई'",
+      locationPlaceholder: "स्थान, जैसे 'नोएडा'",
+      results: 'खोज परिणाम',
+      found: 'आपके मानदंडों से मेल खाने वाले {{count}} प्रदाता मिले।',
+      noResults: 'कोई प्रदाता नहीं मिला',
+      noResultsSub: 'अपने खोज शब्दों को समायोजित करने का प्रयास करें, या एक अलग श्रेणी या स्थान चुनें।',
+    }
+  },
+  mr: {
+    common: {
+      appName: 'लोकलफाइंड',
+      login: 'लॉगिन',
+      signup: 'साइन अप',
+      logout: 'लॉग आउट',
+      profile: 'प्रोफाईल',
+      listBusiness: 'तुमचा व्यवसाय जोडा',
+      search: 'शोधा',
+      browse: 'सेवा ब्राउझ करा',
+      allCategories: 'सर्व श्रेणी',
+      about: 'आमच्याबद्दल',
+      contact: 'संपर्क',
+      footerDesc: 'समुदायांना विश्वसनीय स्थानिक सेवांशी जोडणे. तुमच्या शेजारीच तुम्हाला हवे ते मिळवा.',
+      forUsers: 'वापरकर्त्यांसाठी',
+      company: 'कंपनी',
+      privacyPolicy: 'गोपनीयता धोरण',
+      rights: 'सर्व हक्क राखीव.',
+      developedBy: 'प्रथम भोसले (Pratham Bhosale)',
+    },
+    home: {
+      heroTitle: 'स्थानिक सेवा त्वरित शोधा.',
+      heroSub: 'तुमच्या समुदायातील विश्वसनीय सेवा प्रदात्यांसाठी तुमची वन-स्टॉप निर्देशिका.',
+      browseCat: 'श्रेणीनुसार ब्राउझ करा',
+      browseCatSub: 'आमच्या सेवा श्रेणी ब्राउझ करून तुमच्या गरजांसाठी योग्य व्यावसायिक शोधा.',
+      featured: 'वैशिष्ट्यीकृत सेवा',
+      featuredSub: 'घराची दुरुस्ती ते वैयक्तिक कल्याणापर्यंत कोणत्याही कामासाठी टॉप-रेट केलेले व्यावसायिक शोधा.',
+      recentSearches: 'अलीकडील शोध',
+      faqTitle: 'नेहमी विचारले जाणारे प्रश्न',
+      faqSub: 'लोकलफाइंड वापरण्याबद्दल तुम्हाला माहित असणे आवश्यक असलेली प्रत्येक गोष्ट.',
+    },
+    search: {
+      placeholder: "सेवा, उदा. 'प्लंबर'",
+      locationPlaceholder: "ठिकाण, उदा. 'नोएडा'",
+      results: 'शोध निकाल',
+      found: 'तुमच्या निकषांशी जुळणारे {{count}} प्रदाता सापडले.',
+      noResults: 'प्रदाता आढळले नाहीत',
+      noResultsSub: 'तुमच्या शोध संज्ञा समायोजित करण्याचा प्रयत्न करा किंवा वेगळी श्रेणी किंवा स्थान निवडा.',
     }
   }
 };
