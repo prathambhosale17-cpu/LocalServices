@@ -18,8 +18,8 @@ export const dictionaries = {
       forUsers: 'For Users',
       company: 'Company',
       privacyPolicy: 'Privacy Policy',
-      rights: 'All rights reserved.',
-      developedBy: 'matru tecnologi',
+      rights: 'All rights reserved',
+      developedBy: 'Matru Technology',
     },
     home: {
       heroTitle: 'Find Local Services, Instantly.',
@@ -58,8 +58,8 @@ export const dictionaries = {
       forUsers: 'उपयोगकर्ताओं के लिए',
       company: 'कंपनी',
       privacyPolicy: 'गोपनीयता नीति',
-      rights: 'सर्वाधिकार सुरक्षित।',
-      developedBy: 'मातृ टेक्नोलॉजी (matru tecnologi)',
+      rights: 'सर्वाधिकार सुरक्षित',
+      developedBy: 'मातृ टेक्नोलॉजी (Matru Technology)',
     },
     home: {
       heroTitle: 'स्थानीय सेवाएं तुरंत खोजें।',
@@ -98,8 +98,8 @@ export const dictionaries = {
       forUsers: 'वापरकर्त्यांसाठी',
       company: 'कंपनी',
       privacyPolicy: 'गोपनीयता धोरण',
-      rights: 'सर्व हक्क राखीव.',
-      developedBy: 'मातृ टेक्नॉलॉजी (matru tecnologi)',
+      rights: 'सर्व हक्क राखीव',
+      developedBy: 'मातृ टेक्नॉलॉजी (Matru Technology)',
     },
     home: {
       heroTitle: 'स्थानिक सेवा त्वरित शोधा.',
