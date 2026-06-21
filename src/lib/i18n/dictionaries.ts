@@ -59,7 +59,7 @@ export const dictionaries = {
       company: 'कंपनी',
       privacyPolicy: 'गोपनीयता नीति',
       rights: 'सर्वाधिकार सुरक्षित',
-      developedBy: 'मातृ टेक्नोलॉजी (Matru Technology)',
+      developedBy: 'Matru Technology',
     },
     home: {
       heroTitle: 'स्थानीय सेवाएं तुरंत खोजें।',
@@ -99,7 +99,7 @@ export const dictionaries = {
       company: 'कंपनी',
       privacyPolicy: 'गोपनीयता धोरण',
       rights: 'सर्व हक्क राखीव',
-      developedBy: 'मातृ टेक्नॉलॉजी (Matru Technology)',
+      developedBy: 'Matru Technology',
     },
     home: {
       heroTitle: 'स्थानिक सेवा त्वरित शोधा.',
