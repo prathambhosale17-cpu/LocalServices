@@ -10,8 +10,9 @@ import Link from 'next/link';
 import type { ProviderProfile } from '@/lib/types';
 import { SearchBar, SearchBarFallback } from '@/components/SearchBar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { MapPin, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 export default function SearchPageContent() {
   const router = useRouter();
@@ -28,16 +29,6 @@ export default function SearchPageContent() {
   }, [firestore]);
 
   const { data: providers, isLoading } = useCollection<ProviderProfile>(providersColRef);
-
-  // Extract unique locations from providers for the sidebar filter
-  const uniqueLocations = useMemo(() => {
-    if (!providers) return [];
-    const locations = providers
-      .map(p => p.location)
-      .filter((v, i, a) => v && a.indexOf(v) === i)
-      .sort();
-    return locations;
-  }, [providers]);
 
   const filteredProviders = useMemo(() => {
     if (!providers) return [];
@@ -78,7 +69,7 @@ export default function SearchPageContent() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <aside className="col-span-1 md:col-span-1 space-y-8">
           {/* Category Filter */}
-          <div className="sticky top-28 space-y-8">
+          <div className="sticky top-28">
             <div className="p-4 rounded-lg bg-card shadow-lg border">
               <h3 className="font-bold font-headline text-xl mb-4">Categories</h3>
               <ul className="space-y-2">
@@ -101,42 +92,6 @@ export default function SearchPageContent() {
                     </Link>
                   </li>
                 ))}
-              </ul>
-            </div>
-
-            {/* Location Filter */}
-            <div className="p-4 rounded-lg bg-card shadow-lg border">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold font-headline text-xl">Locations</h3>
-                {loc && (
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="h-8 px-2 text-muted-foreground hover:text-destructive"
-                    onClick={() => router.push(`/search?${createQueryString('loc', null)}`)}
-                  >
-                    Clear <X className="ml-1 h-3 w-3" />
-                  </Button>
-                )}
-              </div>
-              <ul className="space-y-1">
-                {isLoading ? (
-                  [...Array(5)].map((_, i) => <Skeleton key={i} className="h-10 w-full mb-1" />)
-                ) : uniqueLocations.length > 0 ? (
-                  uniqueLocations.map(locationName => (
-                    <li key={locationName}>
-                      <Link 
-                        href={`/search?${createQueryString('loc', locationName)}`} 
-                        className={`flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors ${loc === locationName.toLowerCase() ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-accent/50'}`}
-                      >
-                        <MapPin className={`h-4 w-4 ${loc === locationName.toLowerCase() ? 'text-primary' : 'text-muted-foreground'}`} />
-                        {locationName}
-                      </Link>
-                    </li>
-                  ))
-                ) : (
-                  <li className="text-sm text-muted-foreground p-3 italic">No locations found</li>
-                )}
               </ul>
             </div>
           </div>
@@ -193,7 +148,7 @@ export default function SearchPageContent() {
               ) : (
                 <div className="text-center py-24 border-2 border-dashed rounded-lg bg-card mt-12">
                   <h2 className="text-2xl font-semibold font-headline mb-2">No providers found</h2>
-                  <p className="text-muted-foreground max-w-sm mx-auto">Try adjusting your search terms, or select a different category or location to browse available services.</p>
+                  <p className="text-muted-foreground max-w-sm mx-auto">Try adjusting your search terms, or select a different category to browse available services.</p>
                 </div>
               )}
             </>
