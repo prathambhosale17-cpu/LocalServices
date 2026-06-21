@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -8,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Search, MapPin, Tag } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { categories } from '@/lib/data';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export function SearchBar() {
   const router = useRouter();
@@ -16,6 +16,7 @@ export function SearchBar() {
   const [location, setLocation] = useState(searchParams.get('loc') || '');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const containerRef = useRef<HTMLFormElement>(null);
+  const { t } = useLanguage();
 
   const suggestions = useMemo(() => {
     if (!keyword || keyword.length < 2) return [];
@@ -92,7 +93,7 @@ export function SearchBar() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Service, e.g., 'plumber'"
+          placeholder={t('search.placeholder')}
           className="pl-10 text-base"
           value={keyword}
           onFocus={() => setShowSuggestions(true)}
@@ -127,7 +128,7 @@ export function SearchBar() {
         <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Location, e.g., 'Mumbai'"
+          placeholder={t('search.locationPlaceholder')}
           className="pl-10 text-base"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
@@ -137,7 +138,7 @@ export function SearchBar() {
       </div>
       <Button type="submit" className="w-full md:w-auto px-8">
         <Search className="mr-2 h-4 w-4" />
-        Search
+        {t('common.search')}
       </Button>
     </form>
   );

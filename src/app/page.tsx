@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -20,9 +19,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from '@/components/ui/badge';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 function RecentSearches() {
   const [searches, setSearches] = useState<any[]>([]);
+  const { t } = useLanguage();
 
   const loadSearches = () => {
     try {
@@ -42,7 +43,7 @@ function RecentSearches() {
   return (
     <div className="mt-8 flex flex-wrap justify-center gap-3">
       <div className="w-full text-sm text-primary-foreground/70 mb-2 flex items-center justify-center gap-2">
-        <Clock className="h-4 w-4" /> Recent Searches
+        <Clock className="h-4 w-4" /> {t('home.recentSearches')}
       </div>
       {searches.map((s) => (
         <Link
@@ -58,6 +59,7 @@ function RecentSearches() {
 }
 
 function FAQSection() {
+  const { t } = useLanguage();
   const faqs = [
     {
       question: "How do I list my business on LocalFind?",
@@ -82,8 +84,8 @@ function FAQSection() {
       <div className="container mx-auto px-4 md:px-6 max-w-4xl">
         <div className="text-center mb-12">
           <HelpCircle className="h-12 w-12 mx-auto text-primary mb-4" />
-          <h2 className="text-4xl font-bold font-headline">Frequently Asked Questions</h2>
-          <p className="text-muted-foreground mt-3 text-lg">Everything you need to know about using LocalFind.</p>
+          <h2 className="text-4xl font-bold font-headline">{t('home.faqTitle')}</h2>
+          <p className="text-muted-foreground mt-3 text-lg">{t('home.faqSub')}</p>
         </div>
         <Accordion type="single" collapsible className="w-full">
           {faqs.map((faq, index) => (
@@ -102,6 +104,7 @@ function FAQSection() {
 
 export default function Home() {
   const firestore = useFirestore();
+  const { t } = useLanguage();
 
   // Query for featured providers (limited)
   const featuredProvidersQuery = useMemoFirebase(() => {
@@ -133,10 +136,10 @@ export default function Home() {
       <section className="py-20 md:py-32 bg-primary text-primary-foreground overflow-hidden relative">
         <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
           <h1 className="text-4xl md:text-6xl font-headline font-bold mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            Find Local Services, Instantly.
+            {t('home.heroTitle')}
           </h1>
           <p className="text-lg md:text-xl opacity-90 mb-12 max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            Your one-stop directory for trusted service providers in your community.
+            {t('home.heroSub')}
           </p>
           <Suspense fallback={<SearchBarFallback />}>
             <SearchBar />
@@ -153,9 +156,9 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold font-headline">
-              Browse by Category
+              {t('home.browseCat')}
             </h2>
-            <p className="text-muted-foreground mt-3 text-lg max-w-2xl mx-auto">Find the right professional for your needs by browsing our service categories.</p>
+            <p className="text-muted-foreground mt-3 text-lg max-w-2xl mx-auto">{t('home.browseCatSub')}</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-8">
             {categories.map((category) => {
@@ -182,9 +185,9 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold font-headline">
-              Featured Services
+              {t('home.featured')}
             </h2>
-            <p className="text-muted-foreground mt-3 text-lg max-w-2xl mx-auto">Discover top-rated professionals for any job, from home repairs to personal wellness.</p>
+            <p className="text-muted-foreground mt-3 text-lg max-w-2xl mx-auto">{t('home.featuredSub')}</p>
           </div>
           {isFeaturedLoading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
