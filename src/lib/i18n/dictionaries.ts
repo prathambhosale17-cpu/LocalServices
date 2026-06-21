@@ -19,7 +19,7 @@ export const dictionaries = {
       company: 'Company',
       privacyPolicy: 'Privacy Policy',
       rights: 'All rights reserved.',
-      developedBy: 'Pratham Bhosale',
+      developedBy: 'matru tecnologi',
     },
     home: {
       heroTitle: 'Find Local Services, Instantly.',
@@ -59,7 +59,7 @@ export const dictionaries = {
       company: 'कंपनी',
       privacyPolicy: 'गोपनीयता नीति',
       rights: 'सर्वाधिकार सुरक्षित।',
-      developedBy: 'प्रथम भोसले (Pratham Bhosale)',
+      developedBy: 'मातृ टेक्नोलॉजी (matru tecnologi)',
     },
     home: {
       heroTitle: 'स्थानीय सेवाएं तुरंत खोजें।',
@@ -99,7 +99,7 @@ export const dictionaries = {
       company: 'कंपनी',
       privacyPolicy: 'गोपनीयता धोरण',
       rights: 'सर्व हक्क राखीव.',
-      developedBy: 'प्रथम भोसले (Pratham Bhosale)',
+      developedBy: 'मातृ टेक्नॉलॉजी (matru tecnologi)',
     },
     home: {
       heroTitle: 'स्थानिक सेवा त्वरित शोधा.',
