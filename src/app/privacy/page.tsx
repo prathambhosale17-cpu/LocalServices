@@ -1,7 +1,16 @@
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShieldCheck, Lock, Eye, UserCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function PrivacyPolicyPage() {
+  const [formattedDate, setFormattedDate] = useState<string>('');
+
+  useEffect(() => {
+    setFormattedDate(new Date().toLocaleDateString());
+  }, []);
+
   return (
     <div className="bg-muted/20 min-h-screen py-12 md:py-20">
       <div className="container mx-auto px-4 md:px-6">
@@ -9,7 +18,7 @@ export default function PrivacyPolicyPage() {
           <div className="text-center space-y-4">
             <ShieldCheck className="h-16 w-16 mx-auto text-primary" />
             <h1 className="text-4xl md:text-5xl font-bold font-headline">Privacy Policy</h1>
-            <p className="text-muted-foreground text-lg">Last updated: {new Date().toLocaleDateString()}</p>
+            <p className="text-muted-foreground text-lg">Last updated: {formattedDate || '...'}</p>
           </div>
 
           <Card className="shadow-lg border-none">

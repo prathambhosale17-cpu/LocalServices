@@ -2,9 +2,15 @@
 
 import Link from "next/link";
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useEffect, useState } from 'react';
 
 export function Footer() {
   const { t } = useLanguage();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <footer className="bg-card text-muted-foreground mt-auto border-t">
@@ -32,7 +38,11 @@ export function Footer() {
       </div>
       <div className="bg-muted/50 py-6">
         <div className="container mx-auto px-4 text-center text-sm space-y-2">
-          <p>&copy; 2026 {t('common.appName')}. {t('common.rights')} {t('common.developedBy')}</p>
+          {isMounted ? (
+            <p>&copy; 2026 {t('common.appName')}. {t('common.rights')} {t('common.developedBy')}</p>
+          ) : (
+            <p>&copy; 2026 LocalFind. All rights reserved Matru Technology</p>
+          )}
         </div>
       </div>
     </footer>
