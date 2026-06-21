@@ -32,10 +32,7 @@ export function Footer() {
       </div>
       <div className="bg-muted/50 py-6">
         <div className="container mx-auto px-4 text-center text-sm space-y-2">
-          <p>&copy; {new Date().getFullYear()} {t('common.appName')}. {t('common.rights')}</p>
-          <p>
-            {t('common.developedBy')}
-          </p>
+          <p>&copy; 2026 {t('common.appName')}. {t('common.rights')} {t('common.developedBy')}</p>
         </div>
       </div>
     </footer>

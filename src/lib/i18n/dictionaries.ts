@@ -19,7 +19,7 @@ export const dictionaries = {
       company: 'Company',
       privacyPolicy: 'Privacy Policy',
       rights: 'All rights reserved.',
-      developedBy: 'Developed by Pratham Bhosale | Idea by Partha Shekte',
+      developedBy: 'matru Tecnologi',
     },
     home: {
       heroTitle: 'Find Local Services, Instantly.',
@@ -55,7 +55,7 @@ export const dictionaries = {
       company: 'कंपनी',
       privacyPolicy: 'गोपनीयता नीति',
       rights: 'सर्वाधिकार सुरक्षित।',
-      developedBy: 'प्रथम भोसले द्वारा विकसित | पार्थ शेकटे द्वारा विचार',
+      developedBy: 'मातृ टेक्नोलॉजी (matru Tecnologi)',
     },
     home: {
       heroTitle: 'स्थानीय सेवाएं तुरंत खोजें।',
