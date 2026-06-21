@@ -420,8 +420,15 @@ export default function EditBusinessPage() {
               )}
 
 
-              <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Saving Changes...' : 'Save Changes'}
+              <Button type="submit" size="lg" className="w-full md:w-auto" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving Changes...
+                  </>
+                ) : (
+                  'Save Changes'
+                )}
               </Button>
             </form>
           </Form>

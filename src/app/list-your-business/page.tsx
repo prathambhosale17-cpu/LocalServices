@@ -396,8 +396,15 @@ export default function ListYourBusinessPage() {
                 </div>
               )}
 
-              <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Submitting...' : 'Submit and Go Live'}
+              <Button type="submit" size="lg" className="w-full md:w-auto" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  'Submit and Go Live'
+                )}
               </Button>
             </form>
           </Form>
