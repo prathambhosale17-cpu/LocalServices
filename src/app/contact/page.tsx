@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Phone } from "lucide-react";
+import { Mail } from "lucide-react";
 
 export default function ContactPage() {
   return (
@@ -17,10 +17,6 @@ export default function ContactPage() {
             <a href="mailto:technologymatru@gmail.com" className="hover:underline">
               technologymatru@gmail.com
             </a>
-          </div>
-          <div className="flex items-center gap-4">
-            <Phone className="h-6 w-6 text-primary" />
-            <span>+91 8668798776</span>
           </div>
            <div className="pt-4">
             <h3 className="font-semibold text-xl mb-2">Business Inquiries</h3>
