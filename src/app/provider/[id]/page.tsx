@@ -376,9 +376,17 @@ export default function ProviderProfilePage() {
                     </div>
                   )}
                   
-                  {provider?.whatsapp && (
-                    <div className="pt-4">
-                      <Button asChild className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white">
+                  <div className="pt-4 space-y-3">
+                    {provider?.phone && (
+                      <Button asChild className="w-full">
+                        <a href={`tel:${provider.phone}`} className="flex items-center justify-center gap-2">
+                          <Phone className="h-5 w-5" />
+                          Call Now
+                        </a>
+                      </Button>
+                    )}
+                    {provider?.whatsapp && (
+                      <Button asChild className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white border-none">
                         <a 
                           href={`https://wa.me/${provider.whatsapp}`} 
                           target="_blank" 
@@ -389,8 +397,8 @@ export default function ProviderProfilePage() {
                           Message on WhatsApp
                         </a>
                       </Button>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </CardContent>
               </Card>
 
