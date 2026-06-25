@@ -20,6 +20,9 @@ export const dictionaries = {
       privacyPolicy: 'Privacy Policy',
       rights: 'All rights reserved',
       developedBy: 'Matru Technology',
+      developer: 'Developer',
+      suggestion: 'Suggestion by',
+      teamTitle: 'The Minds Behind LocalFind'
     },
     home: {
       heroTitle: 'Find Local Services, Instantly.',
@@ -60,6 +63,9 @@ export const dictionaries = {
       privacyPolicy: 'गोपनीयता नीति',
       rights: 'सर्वाधिकार सुरक्षित',
       developedBy: 'Matru Technology',
+      developer: 'डेवलपर',
+      suggestion: 'सुझावकर्ता',
+      teamTitle: 'लोकलफाइंड के पीछे की टीम'
     },
     home: {
       heroTitle: 'स्थानीय सेवाएं तुरंत खोजें।',
@@ -100,6 +106,9 @@ export const dictionaries = {
       privacyPolicy: 'गोपनीयता धोरण',
       rights: 'सर्व हक्क राखीव',
       developedBy: 'Matru Technology',
+      developer: 'डेव्हलपर',
+      suggestion: 'सुचविणारे',
+      teamTitle: 'लोकलफाइंड मागील टीम'
     },
     home: {
       heroTitle: 'स्थानिक सेवा त्वरित शोधा.',

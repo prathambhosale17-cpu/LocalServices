@@ -1,14 +1,19 @@
-import { Handshake, Target, BookOpen, Users, ShieldCheck, Heart } from 'lucide-react';
+'use client';
+
+import { Handshake, Target, BookOpen, Users, ShieldCheck, Heart, User, Lightbulb } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function AboutPage() {
+  const { t } = useLanguage();
+
   return (
     <div className="bg-muted/20">
       <section className="py-16 md:py-28 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 md:px-6 text-center">
           <Handshake className="h-16 w-16 mx-auto mb-6" />
           <h1 className="text-4xl md:text-5xl font-headline font-bold mb-4">
-            About LocalFind
+            {t('common.about')} {t('common.appName')}
           </h1>
           <p className="text-base md:text-lg opacity-90 max-w-3xl mx-auto">
             Connecting communities with trusted local professionals. We believe in the power of local expertise and are dedicated to making it accessible to everyone.
@@ -73,6 +78,39 @@ export default function AboutPage() {
                 </div>
             </div>
          </div>
+      </section>
+
+      <section className="py-12 md:py-20 bg-muted/30">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold font-headline">{t('common.teamTitle')}</h2>
+          </div>
+          <div className="max-w-2xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <Card className="shadow-md">
+              <CardContent className="p-8 text-center space-y-4">
+                <div className="mx-auto bg-primary/10 text-primary rounded-full p-4 w-fit">
+                  <User className="h-10 w-10" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold font-headline">Pratham Bhosale</h3>
+                  <p className="text-primary font-medium text-sm uppercase tracking-wider">{t('common.developer')}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-md">
+              <CardContent className="p-8 text-center space-y-4">
+                <div className="mx-auto bg-primary/10 text-primary rounded-full p-4 w-fit">
+                  <Lightbulb className="h-10 w-10" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold font-headline">Parth Shekate</h3>
+                  <p className="text-primary font-medium text-sm uppercase tracking-wider">{t('common.suggestion')}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </section>
     </div>
   );
