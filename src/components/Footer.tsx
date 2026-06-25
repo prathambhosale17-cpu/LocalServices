@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useEffect, useState } from 'react';
+import { Youtube, Instagram } from 'lucide-react';
 
 export function Footer() {
   const { t } = useLanguage();
@@ -18,6 +19,28 @@ export function Footer() {
         <div>
           <h3 className="font-bold text-foreground text-xl mb-2 font-headline">{t('common.appName')}</h3>
           <p className="text-sm max-w-xs">{t('common.footerDesc')}</p>
+          <div className="flex gap-4 mt-6">
+            <a 
+              href="https://youtube.com/@matrutechnology_1?si=l-2FL6LMG3BXBZIb" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-primary transition-colors p-2 rounded-full bg-muted/50 hover:bg-muted"
+              title="YouTube"
+            >
+              <Youtube className="h-5 w-5" />
+              <span className="sr-only">YouTube</span>
+            </a>
+            <a 
+              href="https://www.instagram.com/technologymatru?igsh=cTVxZDV0azB1anQ0" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-primary transition-colors p-2 rounded-full bg-muted/50 hover:bg-muted"
+              title="Instagram"
+            >
+              <Instagram className="h-5 w-5" />
+              <span className="sr-only">Instagram</span>
+            </a>
+          </div>
         </div>
         <div>
           <h4 className="font-semibold text-foreground mb-4">{t('common.forUsers')}</h4>
