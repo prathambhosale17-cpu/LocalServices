@@ -20,8 +20,6 @@ import {
   PawPrint,
   Sprout,
   Dumbbell,
-  Gamepad2,
-  Church,
   Truck,
   BriefcaseBusiness,
   Wifi,
@@ -196,20 +194,6 @@ export const categories: Category[] = [
     icon: Dumbbell,
     description: 'Gyms, sports clubs, and athletic training.',
     subServices: ['Gyms', 'Sports Clubs', 'Cricket Academies', 'Football Academies', 'Swimming Pools', 'Martial Arts', 'Sports Equipment']
-  },
-  {
-    id: 'entertainment',
-    name: 'Entertainment',
-    icon: Gamepad2,
-    description: 'Movies, amusement parks, and gaming zones.',
-    subServices: ['Movie Theatres', 'Gaming Zones', 'Amusement Parks', 'Water Parks', 'Bowling', 'Escape Rooms']
-  },
-  {
-    id: 'religious-community',
-    name: 'Religious & Community',
-    icon: Church,
-    description: 'Community halls and religious centers.',
-    subServices: ['Temples', 'Mosques', 'Churches', 'Gurudwaras', 'Ashrams', 'Community Halls']
   },
   {
     id: 'logistics',
