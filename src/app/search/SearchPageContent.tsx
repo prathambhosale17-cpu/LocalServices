@@ -42,6 +42,7 @@ export default function SearchPageContent() {
       const matchesQuery = q ? 
         p.name.toLowerCase().includes(q) ||
         (p.tagline && p.tagline.toLowerCase().includes(q)) ||
+        (p.subcategory && p.subcategory.toLowerCase().includes(q)) || // Added subcategory check
         (p.services && p.services.some(s => s.toLowerCase().includes(q))) : true;
       
       const matchesLocation = loc ? p.location.toLowerCase().includes(loc) : true;
