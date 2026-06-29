@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -79,7 +78,7 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
     <div className="flex items-center gap-2">
       <div className="flex items-center">
         {[...Array(5)].map((_, i) => (
-          <Star key={i} className={`h-5 w-5 ${i < Math.round(rating) ? 'text-indigo-500 fill-indigo-500' : 'text-muted-foreground/30'}`} />
+          <Star key={i} className={`h-5 w-5 ${i < Math.round(rating) ? 'text-primary fill-primary' : 'text-muted-foreground/30'}`} />
         ))}
       </div>
       <span className="font-bold text-lg">{rating.toFixed(1)}</span>
@@ -149,7 +148,7 @@ function ReviewForm({ providerId }: { providerId: string }) {
     return (
       <Card className="bg-muted/30">
         <CardContent className="p-6 text-center">
-          <p className="text-muted-foreground">You must be <Link href="/login" className="text-indigo-600 font-semibold hover:underline">logged in</Link> to leave a review.</p>
+          <p className="text-muted-foreground">You must be <Link href="/login" className="text-primary font-semibold hover:underline">logged in</Link> to leave a review.</p>
         </CardContent>
       </Card>
     )
@@ -172,7 +171,7 @@ function ReviewForm({ providerId }: { providerId: string }) {
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
                           key={star}
-                          className={`h-8 w-8 cursor-pointer transition-colors ${ (hoverRating >= star || currentRating >= star) ? 'text-indigo-500 fill-indigo-500' : 'text-muted-foreground/30'}`}
+                          className={`h-8 w-8 cursor-pointer transition-colors ${ (hoverRating >= star || currentRating >= star) ? 'text-primary fill-primary' : 'text-muted-foreground/30'}`}
                           onMouseEnter={() => setHoverRating(star)}
                           onClick={() => field.onChange(star)}
                         />
@@ -321,8 +320,8 @@ export default function ProviderProfilePage() {
 
             <div className="space-y-2">
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="secondary" className="uppercase text-sm tracking-wider bg-indigo-100 text-indigo-700 hover:bg-indigo-100 border-none">{provider?.category}</Badge>
-                  {provider?.subcategory && <Badge variant="outline" className="uppercase text-sm tracking-wider border-indigo-200 text-indigo-600">{provider.subcategory}</Badge>}
+                  <Badge variant="secondary" className="uppercase text-sm tracking-wider bg-primary/10 text-primary hover:bg-primary/10 border-none">{provider?.category}</Badge>
+                  {provider?.subcategory && <Badge variant="outline" className="uppercase text-sm tracking-wider border-primary/20 text-primary">{provider.subcategory}</Badge>}
                 </div>
                 <h1 className="text-3xl md:text-5xl font-bold font-headline">{provider?.name}</h1>
                 <StarRating rating={avgRating} count={reviewCount} />
@@ -335,14 +334,14 @@ export default function ProviderProfilePage() {
               </CardContent>
             </Card>
 
-            {/* Services Offered moved to Main Column */}
+            {/* Services Offered - Main Column */}
             {provider?.services && provider.services.length > 0 && (
                 <Card className="shadow-lg border-none">
                     <CardHeader><CardTitle className="font-headline text-2xl">Services Offered</CardTitle></CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap gap-3">
                           {provider.services.map(service => (
-                              <Badge key={service} variant="secondary" className="px-4 py-1.5 text-base font-medium rounded-full bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors border-none">{service}</Badge>
+                              <Badge key={service} variant="secondary" className="px-4 py-1.5 text-base font-medium rounded-full bg-primary/5 text-primary hover:bg-primary/10 transition-colors border-none">{service}</Badge>
                           ))}
                       </div>
                     </CardContent>
@@ -372,20 +371,20 @@ export default function ProviderProfilePage() {
                 <CardContent className="space-y-5 text-sm">
                   {provider?.address && (
                     <div className="flex items-start gap-4">
-                      <div className="bg-indigo-50 p-2 rounded-lg"><MapPin className="h-5 w-5 text-indigo-600 flex-shrink-0" /></div>
+                      <div className="bg-primary/5 p-2 rounded-lg"><MapPin className="h-5 w-5 text-primary flex-shrink-0" /></div>
                       <span className="text-foreground text-base leading-tight mt-1">{provider.address}</span>
                     </div>
                   )}
                   {provider?.phone && (
                     <div className="flex items-start gap-4">
-                      <div className="bg-indigo-50 p-2 rounded-lg"><Phone className="h-5 w-5 text-indigo-600 flex-shrink-0" /></div>
-                      <a href={`tel:${provider.phone}`} className="text-indigo-600 hover:underline text-lg font-medium mt-1">{provider.phone}</a>
+                      <div className="bg-primary/5 p-2 rounded-lg"><Phone className="h-5 w-5 text-primary flex-shrink-0" /></div>
+                      <a href={`tel:${provider.phone}`} className="text-primary hover:underline text-lg font-medium mt-1">{provider.phone}</a>
                     </div>
                   )}
                   {provider?.website && (
                     <div className="flex items-start gap-4">
-                      <div className="bg-indigo-50 p-2 rounded-lg"><Globe className="h-5 w-5 text-indigo-600 flex-shrink-0" /></div>
-                      <a href={provider.website} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline text-base mt-1 truncate max-w-[200px]" >
+                      <div className="bg-primary/5 p-2 rounded-lg"><Globe className="h-5 w-5 text-primary flex-shrink-0" /></div>
+                      <a href={provider.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-base mt-1 truncate max-w-[200px]" >
                         {provider.website}
                       </a>
                     </div>
@@ -393,7 +392,7 @@ export default function ProviderProfilePage() {
                   
                   <div className="pt-4 space-y-3">
                     {provider?.phone && (
-                      <Button asChild className="w-full bg-indigo-600 hover:bg-indigo-700 shadow-md h-12 text-lg">
+                      <Button asChild className="w-full bg-primary hover:bg-primary/90 shadow-md h-12 text-lg">
                         <a href={`tel:${provider.phone}`} className="flex items-center justify-center gap-2">
                           <Phone className="h-5 w-5" />
                           Call Now

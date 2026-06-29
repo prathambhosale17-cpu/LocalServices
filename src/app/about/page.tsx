@@ -9,6 +9,7 @@ export default function AboutPage() {
 
   return (
     <div className="bg-muted/20">
+      {/* Hero Section */}
       <section className="py-16 md:py-28 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 md:px-6 text-center">
           <Handshake className="h-16 w-16 mx-auto mb-6" />
@@ -21,6 +22,7 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Mission & Story Section */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
@@ -52,6 +54,7 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Why Choose Us Section */}
       <section className="py-12 md:py-20 bg-card">
          <div className="container mx-auto px-4 md:px-6">
             <div className="text-center mb-12">
@@ -80,6 +83,7 @@ export default function AboutPage() {
          </div>
       </section>
 
+      {/* Team Section */}
       <section className="py-12 md:py-20 bg-muted/30">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
