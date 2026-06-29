@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -41,6 +41,7 @@ import type { ProviderProfile } from '@/lib/types';
 const providerSchema = z.object({
   name: z.string().min(2, 'Business name must be at least 2 characters.'),
   category: z.string().min(1, 'Please select a category.'),
+  subcategory: z.string().optional(),
   tagline: z.string().max(100, 'Tagline is too long.').optional(),
   location: z.string().min(2, 'Location is required.'),
   address: z.string().optional(),
@@ -75,10 +76,17 @@ export default function EditBusinessPage() {
   const form = useForm<ProviderFormValues>({
     resolver: zodResolver(providerSchema),
     defaultValues: {
-      name: '', category: '', tagline: '', location: '', address: '', phone: '',
+      name: '', category: '', subcategory: '', tagline: '', location: '', address: '', phone: '',
       website: '', whatsapp: '', email: '', description: '', services: '', imageUrl: '',
     },
   });
+
+  const selectedCategoryName = form.watch('category');
+  
+  const subcategoryOptions = useMemo(() => {
+    const category = categories.find(cat => cat.name === selectedCategoryName);
+    return category ? category.subServices : [];
+  }, [selectedCategoryName]);
 
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -98,6 +106,7 @@ export default function EditBusinessPage() {
       form.reset({
         name: provider.name || '',
         category: provider.category || '',
+        subcategory: provider.subcategory || '',
         tagline: provider.tagline || '',
         location: provider.location || '',
         address: provider.address || '',
@@ -159,7 +168,6 @@ export default function EditBusinessPage() {
     
     const providerRef = doc(firestore, 'providers', providerId);
     
-    // Initiation of write operation (non-blocking)
     updateDoc(providerRef, submissionData)
       .catch((error) => {
         console.error('Error updating form:', error);
@@ -177,7 +185,6 @@ export default function EditBusinessPage() {
         setIsSubmitting(false);
       });
 
-    // Provide feedback and ensure the loading animation is visible to the user
     setTimeout(() => {
         setIsSubmitting(false);
         toast({ title: 'Update Successful', description: 'Your business listing has been updated.' });
@@ -231,7 +238,13 @@ export default function EditBusinessPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Category</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                      <Select 
+                        onValueChange={(val) => {
+                          field.onChange(val);
+                          form.setValue('subcategory', ''); // Reset subcategory when category changes
+                        }} 
+                        value={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select a service category" />
@@ -250,6 +263,34 @@ export default function EditBusinessPage() {
                   )}
                 />
               </div>
+
+              {selectedCategoryName && subcategoryOptions.length > 0 && (
+                <FormField
+                  control={form.control}
+                  name="subcategory"
+                  render={({ field }) => (
+                    <FormItem className="animate-in fade-in slide-in-from-top-2 duration-300">
+                      <FormLabel>Specific Service (Subcategory)</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="What specific service do you offer?" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {subcategoryOptions.map((sub) => (
+                            <SelectItem key={sub} value={sub}>
+                              {sub}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>Choose the most relevant subcategory for your business.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <FormField
                 control={form.control}
@@ -380,7 +421,7 @@ export default function EditBusinessPage() {
                 name="services"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Services Offered</FormLabel>
+                    <FormLabel>Additional Services Offered (Tags)</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="e.g., Leaky Faucets, Pipe Installation, Drain Cleaning"
@@ -388,7 +429,7 @@ export default function EditBusinessPage() {
                       />
                     </FormControl>
                      <FormDescription>
-                      Enter a comma-separated list of your main services.
+                      Enter a comma-separated list of keywords/services.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

@@ -1,7 +1,9 @@
+
 export interface ProviderProfile {
   userId?: string;
   name: string;
   category: string;
+  subcategory?: string;
   tagline?: string;
   location: string;
   address?: string;

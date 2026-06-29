@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -40,6 +40,7 @@ import { FirestorePermissionError } from '@/firebase/errors';
 const providerSchema = z.object({
   name: z.string().min(2, 'Business name must be at least 2 characters.'),
   category: z.string().min(1, 'Please select a category.'),
+  subcategory: z.string().optional(),
   tagline: z.string().max(100, 'Tagline is too long.').optional(),
   location: z.string().min(2, 'Location is required.'),
   address: z.string().optional(),
@@ -74,6 +75,7 @@ export default function ListYourBusinessPage() {
     defaultValues: {
       name: '',
       category: '',
+      subcategory: '',
       tagline: '',
       location: '',
       address: '',
@@ -86,6 +88,13 @@ export default function ListYourBusinessPage() {
       imageUrl: '',
     },
   });
+
+  const selectedCategoryName = form.watch('category');
+  
+  const subcategoryOptions = useMemo(() => {
+    const category = categories.find(cat => cat.name === selectedCategoryName);
+    return category ? category.subServices : [];
+  }, [selectedCategoryName]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -122,7 +131,6 @@ export default function ListYourBusinessPage() {
     
     const providersColRef = collection(firestore, 'providers');
 
-    // Initiation of write operation (non-blocking)
     addDoc(providersColRef, submissionData)
       .catch((error) => {
         console.error('Error submitting form:', error);
@@ -140,7 +148,6 @@ export default function ListYourBusinessPage() {
         setIsSubmitting(false);
       });
 
-    // Provide immediate feedback and ensure the loading animation is visible to the user
     setTimeout(() => {
         setIsSubmitting(false);
         setIsSubmitted(true);
@@ -165,6 +172,9 @@ export default function ListYourBusinessPage() {
                 <p className="text-muted-foreground text-lg">
                     Your business has been successfully listed and is now visible to everyone.
                 </p>
+                <Button asChild className="mt-8">
+                  <Link href="/profile">Go to Dashboard</Link>
+                </Button>
             </CardContent>
         </Card>
       </div>
@@ -203,7 +213,13 @@ export default function ListYourBusinessPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Category</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                      <Select 
+                        onValueChange={(val) => {
+                          field.onChange(val);
+                          form.setValue('subcategory', ''); // Reset subcategory when category changes
+                        }} 
+                        value={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select a service category" />
@@ -222,6 +238,34 @@ export default function ListYourBusinessPage() {
                   )}
                 />
               </div>
+
+              {selectedCategoryName && subcategoryOptions.length > 0 && (
+                <FormField
+                  control={form.control}
+                  name="subcategory"
+                  render={({ field }) => (
+                    <FormItem className="animate-in fade-in slide-in-from-top-2 duration-300">
+                      <FormLabel>Specific Service (Subcategory)</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="What specific service do you offer?" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {subcategoryOptions.map((sub) => (
+                            <SelectItem key={sub} value={sub}>
+                              {sub}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>Choose the most relevant subcategory for your business.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <FormField
                 control={form.control}
@@ -352,7 +396,7 @@ export default function ListYourBusinessPage() {
                 name="services"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Services Offered</FormLabel>
+                    <FormLabel>Additional Services Offered (Tags)</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="e.g., Leaky Faucets, Pipe Installation, Drain Cleaning"
@@ -360,7 +404,7 @@ export default function ListYourBusinessPage() {
                       />
                     </FormControl>
                      <FormDescription>
-                      Enter a comma-separated list of your main services.
+                      Enter a comma-separated list of additional keywords/services.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -418,3 +462,5 @@ export default function ListYourBusinessPage() {
     </div>
   );
 }
+
+import Link from 'next/link';

@@ -36,6 +36,10 @@
           "type": "string",
           "description": "The category of service offered."
         },
+        "subcategory": {
+          "type": "string",
+          "description": "The specific subcategory of service offered."
+        },
         "tagline": {
           "type": "string",
           "description": "A short, catchy tagline for the provider."
