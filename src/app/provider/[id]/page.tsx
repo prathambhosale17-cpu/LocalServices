@@ -78,7 +78,7 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
     <div className="flex items-center gap-2">
       <div className="flex items-center">
         {[...Array(5)].map((_, i) => (
-          <Star key={i} className={`h-5 w-5 ${i < Math.round(rating) ? 'text-primary fill-primary' : 'text-muted-foreground/30'}`} />
+          <Star key={i} className={`h-5 w-5 ${i < Math.round(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/30'}`} />
         ))}
       </div>
       <span className="font-bold text-lg">{rating.toFixed(1)}</span>
@@ -171,7 +171,7 @@ function ReviewForm({ providerId }: { providerId: string }) {
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
                           key={star}
-                          className={`h-8 w-8 cursor-pointer transition-colors ${ (hoverRating >= star || currentRating >= star) ? 'text-primary fill-primary' : 'text-muted-foreground/30'}`}
+                          className={`h-8 w-8 cursor-pointer transition-colors ${ (hoverRating >= star || currentRating >= star) ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/30'}`}
                           onMouseEnter={() => setHoverRating(star)}
                           onClick={() => field.onChange(star)}
                         />
